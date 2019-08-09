@@ -27,7 +27,7 @@ class CardItemView extends StatelessWidget {
                 //height: 120.0,
                 decoration: BoxDecoration(//封面图
                   image: DecorationImage(
-                      image: NetworkImage(carditem.cover),
+                      image: NetworkImage(carditem.cover+"@320w_200h.jpg"),
                       fit: BoxFit.fitHeight
                   ),
                   borderRadius: BorderRadius.only(

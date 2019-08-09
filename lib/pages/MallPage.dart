@@ -24,11 +24,6 @@ class _MallPageState extends State<MallPage> {
     // TODO: implement initState
     super.initState();
     getMallData();
-    _scrollController.addListener(() {//监听listview是否滑到了最底部
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent&&isrefresh==false) {
-      _getMoreMallData();  // 当滑到最底部时调用
-      }
-    });
   }
   Future<void> getMallData()async{//初始化
     goodlist.addAll(await GetUtilBilibili.getMallList());
@@ -58,7 +53,7 @@ class _MallPageState extends State<MallPage> {
       onRefresh: _onReFreshMall,
       child: ListView(
         //controller: _scrollController,
-        //上划加载更多可能会导致爆内存闪退就注释掉了
+        physics: BouncingScrollPhysics(),
         children: <Widget>[
           buildTopSearch(),
           buildTabs(),
@@ -155,10 +150,11 @@ class _MallPageState extends State<MallPage> {
   }
   Widget buildGridView(){
     return Container(
-      padding: EdgeInsets.fromLTRB(7, 5, 7, 0),
       color: Colors.grey[200],
       child: GridView.builder(
-        physics:  NeverScrollableScrollPhysics(),
+        padding: EdgeInsets.fromLTRB(7, 5, 7, 0),
+        controller: ScrollController(),
+        physics:  ScrollPhysics(),
         shrinkWrap:true,
         itemCount: goodlist.length,
         gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(//控制主轴/纵轴之间空隙，列数，宽高比
@@ -168,6 +164,10 @@ class _MallPageState extends State<MallPage> {
           childAspectRatio: 0.7,
         ),
         itemBuilder: (context,i){
+          print(i);
+          if(i>=goodlist.length-1){
+            //_getMoreMallData(); 
+          }
           return MallCard(goodlist[i]);
         },
       ),
@@ -218,7 +218,7 @@ class MallCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Expanded(
-            child: Image.network(item.cover,fit: BoxFit.contain),
+            child: Image.network(item.cover+"@320w_200h.jpg",fit: BoxFit.contain),
           ),
           Container(
             height: 10,

@@ -45,7 +45,7 @@ class GetReviewByAid{
       HttpClient httpClient=new HttpClient();
       HttpClientRequest request=await httpClient.getUrl(
           //Uri.parse("http://api.bilibili.com/x/v2/reply?jsonp=jsonp&type=1&oid="+aid));
-        Uri.parse("http://api.bilibili.com/x/reply?type=1&nohot=0&oid="+aid));
+        Uri.parse("https://api.bilibili.com/x/reply?type=1&nohot=0&oid="+aid));
 
       HttpClientResponse response=await request.close();
       var result=await response.transform(utf8.decoder).join();

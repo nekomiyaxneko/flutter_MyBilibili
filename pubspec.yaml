@@ -29,10 +29,7 @@ dependencies:
   chewie: 0.9.7
   url_launcher: 5.0.2
   flutter_swiper: ^1.1.6
-  #image_gallery_saver: 1.1.0
-  #permission_handler: ^3.0.1
-  #image_picker: 0.6.0+2
-  #image_picker_saver: 0.1.0
+  pull_to_refresh: ^1.5.0
 
 dev_dependencies:
   flutter_test:

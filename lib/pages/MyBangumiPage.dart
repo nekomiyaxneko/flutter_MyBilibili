@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mytest/pages/LoginPage.dart';
 
@@ -14,7 +15,7 @@ class _MyBangumiState extends State<MyBangumi> {
       alignment: Alignment.topCenter,
       child :GestureDetector(
         onTap: (){
-          Navigator.push(context, new MaterialPageRoute(builder: (contex)=> new LoginPage()));
+          Navigator.push(context, new CupertinoPageRoute(builder: (contex)=> new LoginPage()));
         },
         child: Container(
           height: 200,

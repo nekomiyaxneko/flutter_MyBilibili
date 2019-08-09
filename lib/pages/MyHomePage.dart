@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mytest/MyAppBar/ChannelAppBar.dart';
 import 'package:mytest/MyAppBar/DynamicsAppBar.dart';
@@ -74,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         backgroundImage: AssetImage("images/bili_default_avatar.png"),
                       ),
                       onTap: (){
-                        Navigator.push(context, new MaterialPageRoute(builder: (contex)=> new LoginPage()));
+                        Navigator.push(context, new CupertinoPageRoute(builder: (contex)=> new LoginPage()));
                       },
                     ),
                     otherAccountsPictures: <Widget>[

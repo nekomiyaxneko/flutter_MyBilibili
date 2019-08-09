@@ -1,28 +1,24 @@
 
 import 'package:flutter/material.dart';
 import 'package:mytest/model/jsonmodel/ReviewItem.dart';
-import 'package:mytest/model/jsonmodel/ReviewList_model.dart';
 import 'package:mytest/tools/LineTools.dart';
 import 'package:mytest/util/BilibiliAPI/GetReviewByAid.dart';
-import 'package:mytest/util/GetUtilBilibili.dart';
 
 class ReviewsPage extends StatefulWidget {
   final String aid;
-  ReviewsPage({this.aid});
+  ReviewsPage(this.aid);
   @override
-  _ReviewsPageState createState() => _ReviewsPageState(aid: aid);
+  _ReviewsPageState createState() => _ReviewsPageState();
 }
 
 class _ReviewsPageState extends State<ReviewsPage>
     with AutomaticKeepAliveClientMixin<ReviewsPage>{
-  final String aid;
   List<ReviewItem> reviewList=[];
   //ReviewList reviewListfromjson;
   int pages=0;
   int length=0;
   bool isgetok=false;
   bool isloadfail=false;//假设没有加载失败
-  _ReviewsPageState({this.aid});
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
@@ -53,7 +49,7 @@ class _ReviewsPageState extends State<ReviewsPage>
     }
     else if(isgetok==true){
       //return ReviewListView();
-      return ReviewListView();
+      return reviewListView();
 
     }
     else{
@@ -65,7 +61,7 @@ class _ReviewsPageState extends State<ReviewsPage>
   }
 
   void getReviewList() async{//首次进入
-    reviewList=await GetReviewByAid.getReviewByAid(aid,1);
+    reviewList=await GetReviewByAid.getReviewByAid(widget.aid,1);
     //reviewListfromjson=await GetUtilBilibili.getReviewByAid(aid);
     //print(""+reviewList[0].message);
     //print("get over");
@@ -95,30 +91,31 @@ class _ReviewsPageState extends State<ReviewsPage>
 
   }
   Future<Null> _onRefresh() async {
-    reviewList=await GetReviewByAid.getReviewByAid(aid,1);
+    reviewList=await GetReviewByAid.getReviewByAid(widget.aid,1);
     loadReviewList();
     setState(() {
     });
   }
 
-  Widget ReviewListView(){
+  Widget reviewListView(){
     return RefreshIndicator(
       onRefresh: _onRefresh,
       child: ListView.builder(
-        physics: AlwaysScrollableScrollPhysics(),
+        //physics: BouncingScrollPhysics(),
+        shrinkWrap: true,
         itemCount: pages,
         itemBuilder: (context,i){
           if(i>=pages){
             loadReviewList();
           }
-          return ReviewTile(reviewList[i]);
+          return reviewTile(reviewList[i]);
           //return Text("123");
         },
       ),
     );
 
   }
-  Widget ReviewTile(ReviewItem review){
+  Widget reviewTile(ReviewItem review){
 
     return Column(
       children: <Widget>[

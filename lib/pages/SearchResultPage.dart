@@ -186,7 +186,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                   flex: 1,
                   child: GestureDetector(
                     onTap: (){
-                      Navigator.push(context, new MaterialPageRoute(builder: (contex)=> new VideoPlayPage(videoitem:item)));//打开视频
+                      Navigator.push(context, new MaterialPageRoute(builder: (contex)=> new VideoPlayPage(item)));//打开视频
                     },
                     child: Hero(
                       tag: item.id,

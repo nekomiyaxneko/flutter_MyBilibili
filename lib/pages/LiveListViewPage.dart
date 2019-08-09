@@ -149,7 +149,7 @@ with AutomaticKeepAliveClientMixin<LiveListViewPage>{
                 //height: 120.0,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: NetworkImage(carditem.user_cover),
+                      image: NetworkImage(carditem.user_cover+"@320w_200h.jpg"),
                       fit: BoxFit.cover
                   ),
                   borderRadius: BorderRadius.all(

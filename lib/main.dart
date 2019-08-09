@@ -15,23 +15,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
-  void getweatherData() async{
-    try{
-      HttpClient httpClient=new HttpClient();
-      HttpClientRequest request=await httpClient.getUrl(
-        Uri.parse("http://t.weather.sojson.com/api/weather/city/101030100"));
-        HttpClientResponse response=await request.close();
-        var result=await response.transform(utf8.decoder).join();
-        print(result);
-        httpClient.close();
-    }
-    catch(e){
-      print("请求失败");
-    } finally{
-
-    }
-
-  }
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

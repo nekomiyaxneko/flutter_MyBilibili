@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mytest/MyAppBar/HomeAppBar.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -45,30 +46,35 @@ class _SecondPageState extends State<SecondPage> {
     _chewieController.dispose();
     super.dispose();
   }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("第二页"),
-      ),
-      body: new Center(
-        child: Text(
-          "123"
-        ),
-      ),
-      floatingActionButton: FlatButton(
-          onPressed: (){
-            _launchURL();
-          },
-          child: Text("全屏")),
+      body: NestedScrollView(
+          headerSliverBuilder: _sliverBuilder,
+          body: Center(
+            child: Text('hahaha'),
+          )),
     );
   }
 }
-_launchURL() async {
-  const url = 'https://flutter.io';
-  if (await canLaunch(url)) {
-    await launch(url);
-  } else {
-    throw 'Could not launch $url';
-  }
+ 
+List<Widget> _sliverBuilder(BuildContext context, bool innerBoxIsScrolled) {
+  return <Widget>[
+    SliverAppBar(
+      centerTitle: true, //标题居中
+      expandedHeight: 200.0, //展开高度200
+      backgroundColor: Colors.pink[300],
+      floating: false, //不随着滑动隐藏标题
+      pinned: true, //不固定在顶部
+      flexibleSpace: FlexibleSpaceBar(
+        centerTitle: true,
+        background: Image.asset(
+          "images/head_icon.jpg", 
+          fit: BoxFit.cover,
+        ),
+      ),
+      title: Text("这个是标题"),
+    ),
+  ];
 }

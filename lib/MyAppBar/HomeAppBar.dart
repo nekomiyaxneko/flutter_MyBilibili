@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mytest/pages/SearchIndexPage.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:mytest/pages/SecondPage.dart';
 
 class HomeAppBar extends StatefulWidget implements PreferredSizeWidget{
   //final Image ic_head;
@@ -67,18 +69,14 @@ class _HomeAppBarState extends State<HomeAppBar> {
         ),
         onTap: (){
           print("点击了搜索");
-          Navigator.push(context, new MaterialPageRoute(builder: (contex)=> new SearchIndexPage()));
+          Navigator.push(context, new CupertinoPageRoute(builder: (contex)=> new SearchIndexPage()));//改为侧滑切换动画
         },
       ),
       actions: <Widget>[
         IconButton(
           icon: Icon(Icons.videogame_asset,color: Colors.white,),
           onPressed: (){
-            Scaffold.of(context).showSnackBar(
-              new SnackBar(
-                content: Text("暂未开放"),
-              )
-            );
+            Navigator.push(context, new CupertinoPageRoute(builder: (contex)=> new SecondPage()));
           },
         ),
         IconButton(
