@@ -1,17 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mytest/MyAppBar/ChannelAppBar.dart';
-import 'package:mytest/MyAppBar/DynamicsAppBar.dart';
-import 'package:mytest/MyAppBar/HomeAppBar.dart';
-import 'package:mytest/MyAppBar/MallAppBar.dart';
-import 'package:mytest/pages/ChannelPage.dart';
-import 'package:mytest/pages/DynamicPage.dart';
-import 'package:mytest/pages/HomeTabBar.dart';
-import 'package:mytest/pages/LoginPage.dart';
-import 'package:mytest/pages/MallPage.dart';
-import 'package:mytest/pages/MePage.dart';
-import 'package:mytest/tools/LineTools.dart';
-import 'package:mytest/tools/MyColors.dart';
+import 'package:flutter_MyBilibili/MyAppBar/ChannelAppBar.dart';
+import 'package:flutter_MyBilibili/MyAppBar/DynamicsAppBar.dart';
+import 'package:flutter_MyBilibili/MyAppBar/HomeAppBar.dart';
+import 'package:flutter_MyBilibili/MyAppBar/MallAppBar.dart';
+import 'package:flutter_MyBilibili/pages/channel/ChannelPage.dart';
+import 'package:flutter_MyBilibili/pages/dynamic/DynamicPage.dart';
+import 'package:flutter_MyBilibili/pages/home/HomeTabBar.dart';
+import 'package:flutter_MyBilibili/pages/me/LoginPage.dart';
+import 'package:flutter_MyBilibili/pages/mall/MallPage.dart';
+import 'package:flutter_MyBilibili/tools/LineTools.dart';
+import 'package:flutter_MyBilibili/tools/MyColors.dart';
 class MyHomePage extends StatefulWidget {
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -32,7 +31,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       key: homescaffoldkey,
       appBar:  _widgetOptionsAppBar.elementAt(_selectedIndex),
-      
       body: Center(
         child: IndexedStack(index: _selectedIndex, children: _widgetOptionsItem),//保存每个页面的状态
       ),
@@ -40,19 +38,22 @@ class _MyHomePageState extends State<MyHomePage> {
         type: BottomNavigationBarType.fixed,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(IconData(0xe661,fontFamily:"Bilibili" )),
+            activeIcon: Icon(IconData(0xe662,fontFamily:"Bilibili" )),
             title:Text("首页")
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.color_lens),
+              icon: Icon(IconData(0xe664,fontFamily:"Bilibili" )),
+              activeIcon: Icon(IconData(0xe663,fontFamily:"Bilibili" )),
             title:Text("频道")
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.star),
+              icon: Icon(IconData(0xe666,fontFamily:"Bilibili" )),
+              activeIcon: Icon(IconData(0xe665,fontFamily:"Bilibili" )),
             title:Text("动态")
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
+              icon: Icon(Icons.shopping_basket),
             title:Text("会员购")
           ),
         ],
@@ -68,6 +69,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.only(),
                 children: <Widget>[
                   UserAccountsDrawerHeader(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      //TODO:添加背景图片
+                    ),
                     accountName: new Text("未登陆",style: TextStyle(fontSize: 17),),//用户名字
                     accountEmail: new Text("点击头像登陆",style: TextStyle(color: Colors.grey[300]),),//用户硬币，b币信息
                     currentAccountPicture: GestureDetector(
@@ -75,29 +80,24 @@ class _MyHomePageState extends State<MyHomePage> {
                         backgroundImage: AssetImage("images/bili_default_avatar.png"),
                       ),
                       onTap: (){
-                        Navigator.push(context, new CupertinoPageRoute(builder: (contex)=> new LoginPage()));
+                        Navigator.push(context, new CupertinoPageRoute(builder: (context)=> new LoginPage()));
                       },
                     ),
                     otherAccountsPictures: <Widget>[
-                      /*
-                        Container(//钱包
-                          child: Icon(Icons.input,color: Colors.white,size: 30,),
-                        ),
-                        */
-                        Container(//扫二维码
-                          child: Icon(Icons.crop_free,color: Colors.white,size: 30,),
-                        ),
+                      Icon(IconData(0xe6d3,fontFamily: "Bilibili"),color: Colors.white,size: 30,),
+                      Icon(IconData(0xe690,fontFamily: "Bilibili"),color: Colors.white,size: 30,),
                     ],
                   ),
                   ListTile(
-                    leading: Icon(Icons.home),
+                    selected: true,
+                    leading: Icon(IconData(0xe661,fontFamily:"Bilibili" )),
                     title: Text("主页"),
                     onTap: (){
                       Navigator.pop(context);
                     },
                   ),
                   ListTile(
-                    leading: Icon(Icons.update),
+                    leading: Icon(IconData(0xe67b,fontFamily:"Bilibili" )),
                     title: Text("历史记录"),
                     onTap: (){
                     },
@@ -108,34 +108,34 @@ class _MyHomePageState extends State<MyHomePage> {
                     onTap: (){},
                   ),
                   ListTile(
-                    leading: Icon(Icons.star),
+                    leading: Icon(IconData(0xe673,fontFamily:"Bilibili" )),
                     title: Text("我的收藏"),
                     onTap: (){},
                   ),
                   ListTile(
-                    leading: Icon(Icons.ondemand_video),
+                    leading: Icon(IconData(0xe6c1,fontFamily:"Bilibili" )),
                     title: Text("稍后再看"),
                     onTap: (){},
                   ),
                   DrawLine.GreyLine(),//画线
                   ListTile(
-                    leading: new CircleAvatar(child: Icon(Icons.file_upload),backgroundColor: Colors.white,),
+                    leading:  Icon(Icons.file_upload),
                     title: Text("投稿"),
                     onTap: (){},
                   ),
                   ListTile(
-                    leading: new CircleAvatar(child: Icon(Icons.lightbulb_outline),backgroundColor: Colors.white,),
+                    leading: Icon(Icons.lightbulb_outline),
                     title: Text("创作中心"),
                     onTap: (){},
                   ),
                   DrawLine.GreyLine(),
                   ListTile(
-                    leading: new CircleAvatar(child: Icon(Icons.live_tv),backgroundColor: Colors.white,),
+                    leading: Icon(Icons.live_tv),
                     title: Text("直播中心"),
                     onTap: (){},
                   ),
                   ListTile(
-                    leading: new CircleAvatar(child: Icon(Icons.playlist_add_check),backgroundColor: Colors.white,),
+                    leading: Icon(IconData(0xe6bf,fontFamily:"Bilibili" )),
                     title: Text("我的订单"),
                     onTap: (){},
                   ),
@@ -150,19 +150,19 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      CircleAvatar(child: Icon(Icons.settings),backgroundColor: Colors.white,),
-                      Text("设置"),
+                      Icon(Icons.settings,color: Colors.grey,),
+                      Text("设置",),
                     ],
                   ),
                   Row(
                     children: <Widget>[
-                      CircleAvatar(child: Icon(Icons.widgets),backgroundColor: Colors.white,),
+                      Icon(Icons.widgets,color: Colors.grey),
                       Text("主题"),
                     ],
                   ),
                   Row(
                     children: <Widget>[
-                      CircleAvatar(child: Icon(Icons.brightness_2),backgroundColor: Colors.white,),
+                      Icon(Icons.brightness_2,color: Colors.grey),
                       Text("夜间"),
                     ],
                   ),

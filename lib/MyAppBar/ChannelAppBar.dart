@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_MyBilibili/pages/home/SearchIndexPage.dart';
 class ChannelAppBar extends StatefulWidget implements PreferredSizeWidget{
   final double height;
   const ChannelAppBar({
@@ -20,23 +22,19 @@ class _ChannelAppBarState extends State<ChannelAppBar> {
       centerTitle: true,
       actions: <Widget>[
         IconButton(
-          icon: Icon(Icons.save_alt,color: Colors.white,),
+          icon: Icon(IconData(0xe672,fontFamily: "Bilibili")),
           onPressed: (){
             Scaffold.of(context).showSnackBar(
               new SnackBar(
-                content: Text("暂未开放"),
+                content: Text("下载暂未开放"),
               )
-            );
+            ); 
           },
         ),
         IconButton(
-          icon: Icon(Icons.search,color: Colors.white,),
+          icon: Icon(IconData(0xe669,fontFamily: "Bilibili")),
           onPressed: (){
-            Scaffold.of(context).showSnackBar(
-              new SnackBar(
-                content: Text("暂未开放"),
-              )
-            ); 
+            Navigator.push(context, new CupertinoPageRoute(builder: (contex)=> new SearchIndexPage()));//改为侧滑切换动画
           },
         ),
       ],

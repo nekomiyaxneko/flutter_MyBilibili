@@ -1,4 +1,4 @@
-name: mytest
+name: flutter_MyBilibili
 description: A new Flutter project.
 
 # The following defines the version and build number for your application.
@@ -24,10 +24,10 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   http: 0.12.0+2
-  http_client: 1.0.3
-  video_player: 0.10.0+8
-  chewie: 0.9.7
-  url_launcher: 5.0.2
+  http_client: ^1.0.3
+  video_player: ^0.10.1+6 
+  chewie: ^0.9.7
+  url_launcher: ^5.1.2
   flutter_swiper: ^1.1.6
   pull_to_refresh: ^1.5.0
 
@@ -68,9 +68,8 @@ flutter:
     - images/login_logo_password.png
     - images/ic_tv_play.png
     - images/ic_tv_play_large.png
+    - images/小电视.png
   #  - images/a_dot_ham.jpeg
-      
-
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
 
@@ -82,12 +81,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
+  fonts:
+    - family: Bilibili
+      fonts:
+        - asset: assets/icons/font_bilibili/iconfont.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

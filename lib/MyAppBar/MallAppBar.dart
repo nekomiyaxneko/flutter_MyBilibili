@@ -5,7 +5,6 @@ class MallAppBar extends StatefulWidget implements PreferredSizeWidget{
     this.height:46.0,
   });
    @override
-  // TODO: implement preferredSize
   Size get preferredSize => Size.fromHeight(height);
   @override
   _MallAppBarState createState() => _MallAppBarState();
@@ -20,7 +19,7 @@ class _MallAppBarState extends State<MallAppBar> {
       title: Text("会员购"),
       actions: <Widget>[
         IconButton(
-          icon: Icon(Icons.shopping_cart,color: Colors.white,),
+          icon: Icon(IconData(0xe606,fontFamily: "Bilibili")),
           onPressed: (){
             Scaffold.of(context).showSnackBar(
               new SnackBar(
@@ -30,7 +29,7 @@ class _MallAppBarState extends State<MallAppBar> {
           },
         ),
         IconButton(
-          icon: Icon(Icons.person,color: Colors.white,),
+          icon: Icon(IconData(0xe667,fontFamily: "Bilibili")),
           onPressed: (){
             Scaffold.of(context).showSnackBar(
               new SnackBar(

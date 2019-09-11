@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mytest/beans/ItemView.dart';
+import 'package:flutter_MyBilibili/beans/ItemView.dart';
 
 class SelectedView extends StatefulWidget {
   const SelectedView({Key key,this.item});

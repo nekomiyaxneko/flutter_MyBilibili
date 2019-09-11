@@ -2,13 +2,13 @@ import 'dart:io';
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:mytest/model/VideoItem.dart';
-import 'package:mytest/model/VideoItemFromJson.dart';
-import 'package:mytest/model/jsonmodel/ChannelItem.dart';
-import 'package:mytest/model/jsonmodel/GoodItem.dart';
-import 'package:mytest/model/jsonmodel/ReviewList_model.dart';
-import 'package:mytest/model/jsonmodel/recommendlist_model.dart';
-import "package:mytest/model/jsonmodel/LiveItem.dart";
+import 'package:flutter_MyBilibili/model/VideoItem.dart';
+import 'package:flutter_MyBilibili/model/VideoItemFromJson.dart';
+import 'package:flutter_MyBilibili/model/jsonmodel/ChannelItem.dart';
+import 'package:flutter_MyBilibili/model/jsonmodel/GoodItem.dart';
+import 'package:flutter_MyBilibili/model/jsonmodel/ReviewList_model.dart';
+import 'package:flutter_MyBilibili/model/jsonmodel/recommendlist_model.dart';
+import "package:flutter_MyBilibili/model/jsonmodel/LiveItem.dart";
 
 class GetUtilBilibili {
   static final String appkey = "c1b107428d337928";

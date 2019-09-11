@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mytest/main.dart';
-import 'package:mytest/pages/MyHomePage.dart';
+import 'package:flutter_MyBilibili/main.dart';
+import 'package:flutter_MyBilibili/pages/MyHomePage.dart';
 
 class SplashPage extends StatefulWidget {
   @override

@@ -1,4 +1,4 @@
-import 'package:mytest/tools/MyMath.dart';
+import 'package:flutter_MyBilibili/tools/MyMath.dart';
 
 class VideoItem{
   VideoItem({this.danmu,this.cover,this.msg,this.title,this.time,this.view,this.id,this.aid,this.tname,this.desc});

@@ -20,13 +20,11 @@ class _DynamicsAppBarState extends State<DynamicsAppBar> {
       title: Text("动态"),
       actions: <Widget>[
         IconButton(
-          icon: Icon(Icons.border_color,color: Colors.white,),
-          onPressed: (){
-            Scaffold.of(context).showSnackBar(
-              new SnackBar(
-                content: Text("暂未开放"),
-              )
-            );
+          icon: Icon(IconData(0xe61e, fontFamily: "Bilibili")),
+          onPressed: () {
+            Scaffold.of(context).showSnackBar(new SnackBar(
+              content: Text("请先登陆"),
+            ));
           },
         ),
       ],

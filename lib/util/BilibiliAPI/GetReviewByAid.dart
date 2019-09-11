@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:mytest/model/jsonmodel/ReviewItem.dart';
-import 'package:mytest/model/jsonmodel/ReviewList_model.dart';
+import 'package:flutter_MyBilibili/model/jsonmodel/ReviewItem.dart';
+import 'package:flutter_MyBilibili/model/jsonmodel/ReviewList_model.dart';
 
 class GetReviewByAid{
   static  getReviewByAid(String aid,int page,) async{

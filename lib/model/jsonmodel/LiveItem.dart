@@ -1,4 +1,4 @@
-import 'package:mytest/tools/MyMath.dart';
+import 'package:flutter_MyBilibili/tools/MyMath.dart';
 
 class Banner{
   String pic;

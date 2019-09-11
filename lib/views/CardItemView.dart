@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:mytest/model/VideoItem.dart';
-import 'package:mytest/pages/VideoPlayPage.dart';
+import 'package:flutter_MyBilibili/model/VideoItem.dart';
 
 class CardItemView extends StatelessWidget {
   final VideoItem carditem;
@@ -11,6 +8,7 @@ class CardItemView extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Card(
+      elevation: 0.5,
       color: Colors.white,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(5.0))
@@ -24,7 +22,6 @@ class CardItemView extends StatelessWidget {
             child: Hero(
               tag: "${carditem.id}",
               child: Container(
-                //height: 120.0,
                 decoration: BoxDecoration(//封面图
                   image: DecorationImage(
                       image: NetworkImage(carditem.cover+"@320w_200h.jpg"),
@@ -39,12 +36,14 @@ class CardItemView extends StatelessWidget {
                 alignment: Alignment.bottomCenter,
                 child: Container(
                   width: double.infinity,
-                  padding: EdgeInsets.all(2),
-                  //constraints: BoxConstraints.,
+                  padding: EdgeInsets.only(top: 20,bottom: 2,left: 2,right: 2),
                   decoration: BoxDecoration(
-                    color: Colors.black38
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      colors: [Color.fromRGBO(0, 0, 0, 0.01),Colors.black54]
+                    ),
                   ),
-                  //padding: EdgeInsets.only(left: 3,right: 3,bottom: 0),
                   child: Text("播放 "+carditem.view+" 弹幕 "+carditem.danmu+" "+carditem.time,
                     style: TextStyle(color: Colors.white,fontSize: 12),
                     maxLines: 1,
