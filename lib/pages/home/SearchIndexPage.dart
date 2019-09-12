@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_MyBilibili/pages/home/SearchResultPage.dart';
+import 'package:flutter_MyBilibili/services/search_services.dart';
 import 'package:flutter_MyBilibili/tools/LineTools.dart';
+import 'package:flutter_MyBilibili/util/GetUtilBilibili.dart';
 
 class SearchIndexPage extends StatefulWidget {
   @override
@@ -10,8 +12,31 @@ class SearchIndexPage extends StatefulWidget {
 class _SearchIndexPageState extends State<SearchIndexPage> {
   TextEditingController searchcontroller = TextEditingController();
   String keyword = "";
-  List _searchRecommandList = ["建国70周年", "黄晓明", "苹果发布会", "女高中生虚度日常", "说好不哭"];
-  List _historyList = ["五五开", "绝地求生", "我的世界", "ipad", "有一个超好的女朋友是怎样的体验"];
+  List _hotSearchList = [];
+  List _historyList = [];
+
+  @override
+  void initState() {
+    initHotKeyword();
+    getHistory();
+    super.initState();
+  }
+
+  initHotKeyword() async {
+    _hotSearchList = await GetUtilBilibili.getHotSearchlList();
+    if (this.mounted) {
+      setState(() {});
+    }
+  }
+
+  getHistory() async {
+    _historyList = await SearchServices.getHistoryList();
+    print(_historyList);
+    if (this.mounted) {
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,12 +81,7 @@ class _SearchIndexPageState extends State<SearchIndexPage> {
             onSubmitted: (text) {
               //提交时候回调
               if (text != "") {
-                Navigator.push(
-                  context,
-                  new MaterialPageRoute(
-                    builder: (contex) => new SearchResultPage(text),
-                  ),
-                );
+                doSearch();
               }
             },
             onChanged: (text) {
@@ -98,17 +118,12 @@ class _SearchIndexPageState extends State<SearchIndexPage> {
             padding: EdgeInsets.all(10),
             child: Wrap(
               spacing: 10,
-              children: _searchRecommandList.map((title) {
+              children: _hotSearchList.map((title) {
                 return FlatButton(
                   color: Colors.grey[200],
                   onPressed: () {
                     keyword = title;
-                    Navigator.push(
-                      context,
-                      new MaterialPageRoute(
-                        builder: (contex) => new SearchResultPage(keyword),
-                      ),
-                    );
+                    doSearch();
                   },
                   child: Text(title),
                 );
@@ -129,18 +144,70 @@ class _SearchIndexPageState extends State<SearchIndexPage> {
                   color: Colors.grey[200],
                   onPressed: () {
                     keyword = title;
-                    Navigator.push(
-                      context,
-                      new MaterialPageRoute(
-                        builder: (contex) => new SearchResultPage(keyword),
-                      ),
-                    );
+                    doSearch();
                   },
                   child: Text(title),
                 );
               }).toList(),
             ),
-          )
+          ),
+          Offstage(
+            //控制按钮是否可见
+            offstage: _historyList.length>0?false:true,
+            child: Container(
+            alignment: Alignment.center,
+            child: FlatButton(
+              onPressed:clearHistory,
+              child: Text("清空历史记录"),
+            ),
+          ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  doSearch() {
+    Navigator.push(
+      context,
+      new MaterialPageRoute(
+        builder: (contex) => new SearchResultPage(keyword),
+      ),
+    ).then((_) async {
+      await SearchServices.setHistoryData(keyword);
+      await getHistory();
+      if (this.mounted) {
+        setState(() {});
+      }
+    });
+  }
+
+  clearHistory() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Text(
+          '确认清空历史记录?',
+          textAlign: TextAlign.center,
+        ),
+        actions:<Widget>[
+          FlatButton(
+              child: Text("取消"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            FlatButton(
+              child: Text("确定"),
+              onPressed: () async {
+                await SearchServices.removeHistory();
+                _historyList.clear();
+                if (this.mounted) {
+                  setState(() {});
+                }
+                Navigator.pop(context);
+              },
+            ),
         ],
       ),
     );

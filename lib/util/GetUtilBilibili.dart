@@ -226,7 +226,6 @@ class GetUtilBilibili {
       var result = await response.transform(utf8.decoder).join();
       Map<String, dynamic> jsondata = json.decode(result);
       //print("rpid "+jsondata["data"]["replies"][0]["rpid"].toString());
-      print(jsondata);
       for (Map<String, dynamic> item in jsondata["data"]["item"]) {
         if (item["linktype"] == "video") {
           //print(item["title"]);
@@ -297,6 +296,28 @@ class GetUtilBilibili {
     } catch (e) {
       print("goods请求失败");
       return List<GoodItem>();
+    } finally {}
+  }
+
+  static getHotSearchlList() async {
+    //获取获取热搜列表列表
+    try {
+      List<String> hotSearchlList = List<String>();
+      HttpClient httpClient = new HttpClient();
+      HttpClientRequest request = await httpClient.getUrl(Uri.parse(
+          "https://app.bilibili.com/x/v2/search/hot?build=5370000&limit=10"));
+      HttpClientResponse response = await request.close();
+      var result = await response.transform(utf8.decoder).join();
+      Map<String, dynamic> jsondata = json.decode(result);
+      for (Map<String, dynamic> item in jsondata["data"]["list"]) {
+          hotSearchlList.add(item["keyword"]);
+      }
+      print("hot search get ok");
+      httpClient.close();
+      return hotSearchlList;
+    } catch (e) {
+      print("hot search get error");
+      return List<String>();
     } finally {}
   }
 }

@@ -1,17 +1,23 @@
+import 'dart:typed_data';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_MyBilibili/icons/bilibili_icons.dart';
 import 'package:flutter_MyBilibili/model/VideoItem.dart';
 import 'package:flutter_MyBilibili/model/VideoItemFromJson.dart';
 import 'package:flutter_MyBilibili/pages/home/ReviewsPage.dart';
 import 'package:flutter_MyBilibili/pages/home/video_detail_page.dart';
+import 'package:flutter_MyBilibili/tools/sliver_appbar_delegate.dart';
 import 'package:flutter_MyBilibili/util/GetUtilBilibili.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class VideoPlayPage extends StatefulWidget {
   @override
   final VideoItem videoitem; //视频基本信息，av号封面
   VideoPlayPage(this.videoitem);
-  _VideoPlayPageState createState() =>
-      _VideoPlayPageState(videoitem: videoitem);
+  _VideoPlayPageState createState() => _VideoPlayPageState(videoitem);
 }
 
 class _VideoPlayPageState extends State<VideoPlayPage> {
@@ -24,19 +30,17 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
   bool _getvideodetailisok = false;
   bool isclickcover = false;
   bool _isHideTitle = true;
-  _VideoPlayPageState({this.videoitem});
+  _VideoPlayPageState(this.videoitem);
   @override
   void initState() {
-    // TODO: implement initState
     getDetail();
     //设置封面滚动监听，隐藏标题
     _nestedScrollViewController.addListener(() {
-      print(_nestedScrollViewController.offset);
-      if (_nestedScrollViewController.offset > 166 && _isHideTitle == true) {
+      if (_nestedScrollViewController.offset > 110 && _isHideTitle == true) {
         setState(() {
           _isHideTitle = false;
         });
-      } else if (_nestedScrollViewController.offset <= 166 &&
+      } else if (_nestedScrollViewController.offset <= 110 &&
           _isHideTitle == false) {
         setState(() {
           _isHideTitle = true;
@@ -48,7 +52,6 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _nestedScrollViewController.dispose();
     _tabController.dispose();
     super.dispose();
@@ -61,7 +64,9 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
       _getvideodetailisok = true;
       print("getDetailok");
     }
-    setState(() {});
+    if (this.mounted) {
+      setState(() {});
+    }
   }
 
   void showSnackBar(String message) {
@@ -80,12 +85,17 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
             SliverAppBar(
               title: Offstage(
                 offstage: _isHideTitle,
-                child: Text("立即播放"),
+                child: GestureDetector(
+                  onTap: (){
+                    _nestedScrollViewController.jumpTo(0);
+                  },
+                  child: Text("立即播放"),
+                ),
               ),
               elevation: 1,
               centerTitle: true,
               forceElevated: true,
-              expandedHeight: 220,
+              expandedHeight: 170,
               //floating: true,
               //snap: true,
               pinned: true,
@@ -94,63 +104,76 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
               flexibleSpace: FlexibleSpaceBar(
                 collapseMode: CollapseMode.pin,
                 centerTitle: true,
-                background: Column(
-                  children: <Widget>[
-                    Expanded(
-                      child: Hero(
-                          tag: "${videoitem.id}",
-                          child: Container(
-                            width: double.infinity,
-                            child: Image.network(
-                              "${videoitem.cover}@320w_200h.jpg",
-                              fit: BoxFit.fitWidth,
-                            ),
-                          )),
-                    ),
-                    Container(
-                      height: 50,
-                      color: Colors.grey[800],
-                      child: Container(
-                        alignment: Alignment.centerLeft,
-                        padding: EdgeInsets.only(left: 20),
-                        width: double.infinity,
-                        margin: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                            color: Colors.grey[700],
-                            borderRadius: BorderRadius.circular(22)),
-                        child: Text(
-                          "发个友善的弹幕见证一下",
-                          style: TextStyle(color: Colors.grey),
-                        ),
+                background: Hero(
+                  tag: "${videoitem.id}",
+                  child: GestureDetector(
+                    onTap: () {
+                      _showCheckDialog(videoitem.cover);
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      child: Image.network(
+                        "${videoitem.cover}@320w_200h.jpg",
+                        fit: BoxFit.fitWidth,
                       ),
                     ),
-                  ],
+                  ),
                 ),
               ),
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.more_vert),
+                  onPressed: () {},
+                )
+              ],
             ),
             SliverPersistentHeader(
               pinned: true,
-              delegate: _SliverAppBarDelegate(
-                  maxHeight: 50,
-                  minHeight: 50,
-                  child: Container(
-                    color: Colors.white,
-                    child: TabBar(
-                      controller: _tabController,
-                      indicatorSize: TabBarIndicatorSize.label,
-                      labelColor: Colors.pinkAccent,
-                      unselectedLabelColor: Colors.grey,
-                      indicatorColor: Colors.pinkAccent,
-                      tabs: <Widget>[
-                        Tab(
-                          text: "简介",
+              delegate: SliverAppBarDelegate(
+                maxHeight: 40,
+                minHeight: 40,
+                child: Container(
+                  color: Colors.white,
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 1,
+                        child: TabBar(
+                          controller: _tabController,
+                          indicatorSize: TabBarIndicatorSize.label,
+                          labelColor: Colors.pinkAccent,
+                          unselectedLabelColor: Colors.grey,
+                          indicatorColor: Colors.pinkAccent,
+                          tabs: <Widget>[
+                            Tab(
+                              text: "简介",
+                            ),
+                            Tab(
+                              text: "评论",
+                            )
+                          ],
                         ),
-                        Tab(
-                          text: "评论",
-                        )
-                      ],
-                    ),
-                  )),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                            margin: EdgeInsets.only(right: 40),
+                            alignment: Alignment.centerRight,
+                            child: Container(
+                              padding: EdgeInsets.only(left: 5, right: 5),
+                              decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Icon(
+                                BIcon.danmu_off,
+                                color: Colors.grey[600],
+                              ),
+                            )),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
           ];
         },
@@ -168,37 +191,54 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
       ),
     );
   }
-}
 
-class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-  final double minHeight;
-  final double maxHeight;
-  final Widget child;
-  _SliverAppBarDelegate({
-     this.minHeight,
-     this.maxHeight,
-     this.child,
-  });
-
-  @override
-  double get minExtent => minHeight;
-
-  @override
-  double get maxExtent => maxHeight;
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return new SizedBox.expand(child: child);
+  _showCheckDialog(String url) async {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        contentPadding: EdgeInsets.all(15),
+        content: Text(
+          '是否保存封面?',
+          textAlign: TextAlign.center,
+        ),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("取消"),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          FlatButton(
+            child: Text("确定"),
+            onPressed: () async {
+              Navigator.pop(context);
+              await _saveCover(url);
+            },
+          ),
+        ],
+      ),
+    );
   }
 
-  @override
-  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
-    return maxHeight != oldDelegate.maxHeight ||
-        minHeight != oldDelegate.minHeight ||
-        child != oldDelegate.child;
+  _saveCover(String url) async {
+     Fluttertoast.showToast(msg: "正在保存");
+    //先检查权限
+    await PermissionHandler().requestPermissions([PermissionGroup.storage]);
+    PermissionStatus permission = await PermissionHandler()
+        .checkPermissionStatus(PermissionGroup.storage);
+    if (permission == PermissionStatus.granted) {
+      var response = await Dio()
+          .get(url, options: Options(responseType: ResponseType.bytes));
+      final result =
+          await ImageGallerySaver.saveImage(Uint8List.fromList(response.data));
+      Fluttertoast.showToast(msg: "保存成功 路径"+result);
+    } else {
+      Fluttertoast.showToast(msg: "申请权限失败");
+    }
   }
+   
 }
+
 
 openUrl(String url) async {
   if (await canLaunch(url)) {

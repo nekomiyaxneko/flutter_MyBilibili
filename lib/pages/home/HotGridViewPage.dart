@@ -27,18 +27,19 @@ class _HotGridViewPageState extends State<HotGridViewPage>
   bool isaddok = false;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
+
   @override
   void dispose() {
-    // TODO: implement dispose
     _scrollController.dispose();
     _refreshController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Container(
       color: Colors.grey[200],
       child: buildCardList(),
@@ -51,15 +52,15 @@ class _HotGridViewPageState extends State<HotGridViewPage>
       controller: _refreshController,
       onRefresh: _onRefresh,
       onLoading: _onLoading,
-      header: WaterDropHeader(),
       footer: CustomFooter(
-        builder: (context,LoadStatus mode){
+        builder: (context, LoadStatus mode) {
           Widget body;
-          if(mode==LoadStatus.loading){
-            body=CupertinoActivityIndicator();
-          }
-          else{
-            body=Text("没有新东西");
+          if (mode == LoadStatus.loading) {
+            body = CupertinoActivityIndicator();
+          } else {
+            body = Center(
+              child: Text("正在加载"),
+            );
           }
           return Container(
             height: 30,
@@ -71,22 +72,20 @@ class _HotGridViewPageState extends State<HotGridViewPage>
         physics: BouncingScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             //控制主轴/纵轴之间空隙，列数，宽高比
-            mainAxisSpacing: 5.0,
-            crossAxisSpacing: 5.0,
+            mainAxisSpacing: 3.0,
+            crossAxisSpacing: 2.0,
             crossAxisCount: 2,
             childAspectRatio: 0.9),
         padding: EdgeInsets.all(5),
         itemCount: listData.length,
         itemBuilder: (BuildContext contex, int index) {
-          //print("index $index");
           return GestureDetector(
             child: CardItemView(carditem: listData[index]),
             onTap: () {
               Navigator.push(
                   context,
                   new MaterialPageRoute(
-                      builder: (contex) =>
-                          new VideoPlayPage(listData[index])));
+                      builder: (contex) => new VideoPlayPage(listData[index])));
             },
             onLongPress: () {
               openUrl(listData[index].cover);
@@ -97,47 +96,20 @@ class _HotGridViewPageState extends State<HotGridViewPage>
     );
   }
 
-  addCard() async {
-    //print("in addcard");
-    listData.addAll(await GetUtilBilibili.getRecommend());
-    //print("addok");
-    isaddok = true;
-    setState(() {});
-    //print("listlen: ${listData.length}");
-  }
 
   Future<Null> _onLoading() async {
     //print('onAddcard');
     listData.addAll(await GetUtilBilibili.getRecommend());
     _refreshController.loadComplete();
-    setState(() {});
+    if(mounted) setState(() {});
   }
 
   Future<Null> _onRefresh() async {
     listData.clear();
     listData.addAll(await GetUtilBilibili.getRecommend());
     _refreshController.refreshCompleted();
-    setState(() {});
+    if(mounted) setState(() {});
   }
-/*
-  void _onImageSaveButtonPressed(String url) async {
-    print("_onImageSaveButtonPressed");
-    var response = await http
-    //.get('http://upload.art.ifeng.com/2017/0425/1493105660290.jpg');
-        .get(url);
-
-    debugPrint(response.statusCode.toString());
-
-    var filePath = await ImagePickerSaver.saveFile(
-        fileData: response.bodyBytes);
-
-    var savedFile= File.fromUri(Uri.file(filePath));
-    print(savedFile.toString());
-    setState(() {
-      //_imageFile = Future<File>.sync(() => savedFile);
-      });
-  }
-  */
 
   @override
   // TODO: implement wantKeepAlive

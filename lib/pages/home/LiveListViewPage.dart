@@ -83,7 +83,7 @@ class _LiveListViewPageState extends State<LiveListViewPage>
       );
     } else {
       return Center(
-        child: Text("正在加载。。"),
+        child: CircularProgressIndicator(),
       );
     }
   }
@@ -142,7 +142,7 @@ class _LiveListViewPageState extends State<LiveListViewPage>
             child: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: NetworkImage(carditem.user_cover + "@320w_200h.jpg"),
+                    image: NetworkImage(carditem.user_cover + "@320w_200h"),
                     fit: BoxFit.cover),
                 borderRadius: BorderRadius.all(Radius.circular(5)),
               ),
@@ -169,7 +169,7 @@ class _LiveListViewPageState extends State<LiveListViewPage>
                   height: 39,
                   width: 39,
                   decoration: BoxDecoration(
-                    image: DecorationImage(image: NetworkImage(carditem.face)),
+                    image: DecorationImage(image: NetworkImage(carditem.face + "@100w_100h")),
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),

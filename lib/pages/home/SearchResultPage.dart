@@ -42,7 +42,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
     pn++;
     videoresullist
         .addAll(await GetUtilBilibili.getSearchByKeyword(keyword, pn));
-    if(this.mounted){
+    if (this.mounted) {
       setState(() {});
     }
   }
@@ -57,7 +57,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
     videoresullist
         .addAll(await GetUtilBilibili.getSearchByKeyword(keyword, pn));
     print("getresult end");
-    if(this.mounted){
+    if (this.mounted) {
       setState(() {
         if (videoresullist.length != 0) {
           isgetok = true;
@@ -94,7 +94,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
               style: TextStyle(color: Colors.grey),
               decoration: InputDecoration(
                 prefixIcon: Icon(
-                  IconData(0xe669,fontFamily: "Bilibili"),
+                  IconData(0xe669, fontFamily: "Bilibili"),
                   color: Colors.grey,
                 ),
                 hintText: "搜索视频或av号",
@@ -162,9 +162,19 @@ class _SearchResultPageState extends State<SearchResultPage> {
       return Column(
         children: <Widget>[
           Container(
-            alignment: Alignment.center,
-            height: 40,
-            child: Text("搜索结果"),
+              alignment: Alignment.center,
+              height: 40,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Text("默认排序"),
+                  Text("全部时长"),
+                  Text("全部分区"),
+                ],
+              )),
+          Container(
+            color: Colors.grey[300],
+            height: 0.5,
           ),
           Expanded(
             child: ListView.builder(
@@ -197,91 +207,84 @@ class _SearchResultPageState extends State<SearchResultPage> {
     //单个结果
     return Container(
       height: 120,
-      child: Column(
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.all(10),
-            child: Row(
-              children: <Widget>[
-                Expanded(
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+              context,
+              new MaterialPageRoute(
+                  builder: (contex) => new VideoPlayPage(item))); //打开视频
+        },
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.all(10),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
                     //封面
                     flex: 1,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            new MaterialPageRoute(
-                                builder: (contex) =>
-                                    new VideoPlayPage(item))); //打开视频
-                      },
-                      child: Hero(
-                        tag: item.id,
-                        child: Container(
-                          height: 95,
-                          alignment: Alignment.bottomRight,
-                          decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(2)),
-                              image: DecorationImage(
-                                  image: NetworkImage(
-                                    item.cover,
-                                  ), //封面
-                                  fit: BoxFit.cover)),
-                          child: Padding(
-                            padding: EdgeInsets.all(3),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(3)),
-                                color: Colors.black38,
-                              ),
-                              child: Text(
-                                item.time,
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
+                    child: Container(
+                      height: 95,
+                      alignment: Alignment.bottomRight,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(2)),
+                          image: DecorationImage(
+                              image: NetworkImage(
+                                item.cover,
+                              ), //封面
+                              fit: BoxFit.cover)),
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                        margin: EdgeInsets.fromLTRB(5, 3, 5, 3),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(3)),
+                          color: Colors.black54,
+                        ),
+                        child: Text(
+                          item.time,
+                          style: TextStyle(color: Colors.white),
                         ),
                       ),
-                    )),
-                SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  //详情
-                  flex: 1,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      Text(
-                        item.title,
-                        style: TextStyle(fontSize: 14),
-                        maxLines: 2,
-                        textAlign: TextAlign.start,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        item.author,
-                        textAlign: TextAlign.start,
-                        maxLines: 1,
-                      ),
-                      Text(
-                        "播放 ${item.view} 弹幕 ${item.danmu}",
-                        textAlign: TextAlign.start,
-                        maxLines: 1,
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ],
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    //详情
+                    flex: 1,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        Text(
+                          item.title,
+                          style: TextStyle(fontSize: 14),
+                          maxLines: 2,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          item.author,
+                          textAlign: TextAlign.start,
+                          maxLines: 1,
+                        ),
+                        Text(
+                          "播放 ${item.view} 弹幕 ${item.danmu}",
+                          textAlign: TextAlign.start,
+                          maxLines: 1,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          DrawLine.GreyLine(),
-        ],
+            DrawLine.GreyLine(),
+          ],
+        ),
       ),
     );
   }

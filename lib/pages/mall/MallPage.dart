@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_MyBilibili/model/jsonmodel/GoodItem.dart';
 import 'package:flutter_MyBilibili/util/GetUtilBilibili.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class MallPage extends StatefulWidget {
   @override
@@ -17,31 +19,25 @@ class _MallPageState extends State<MallPage> {
     "http://i2.hdslb.com/bfs/openplatform/201905/12421557129720654.jpeg",
   ];
   List<GoodItem> goodlist=List<GoodItem>();
-  ScrollController _scrollController = new ScrollController();
-  bool isrefresh=false;
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: true);
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getMallData();
   }
-  Future<void> getMallData()async{//初始化
+  Future<void> _onRefresh()async{//下拉刷新的函数返回值必须是Future<void>，之前没注意到一直报错
+    goodlist.clear();
     goodlist.addAll(await GetUtilBilibili.getMallList());
-    setState(() {
+    _refreshController.refreshCompleted();
+    if(mounted) setState(() {
       
     });
   }
-  Future<void> _onReFreshMall()async{//下拉刷新的函数返回值必须是Future<void>，之前没注意到一直报错
-    isrefresh=true;
-    goodlist.clear();
+  Future<void> _onLoading()async{//加载更多
     goodlist.addAll(await GetUtilBilibili.getMallList());
-    setState(() {
-     isrefresh=false;
-    });
-  }
-  void _getMoreMallData()async{//加载更多
-    goodlist.addAll(await GetUtilBilibili.getMallList());
-    setState(() {
+    _refreshController.loadComplete();
+    if(mounted) setState(() {
     });
   }
   @override
@@ -49,8 +45,27 @@ class _MallPageState extends State<MallPage> {
     return buildIndexListView();
   }
   Widget buildIndexListView(){
-    return RefreshIndicator(
-      onRefresh: _onReFreshMall,
+    return SmartRefresher(
+      enablePullUp: true,
+      controller: _refreshController,
+      onLoading: _onLoading,
+      onRefresh: _onRefresh,
+      footer: CustomFooter(
+        builder: (context, LoadStatus mode) {
+          Widget body;
+          if (mode == LoadStatus.loading) {
+            body = CupertinoActivityIndicator();
+          } else {
+            body = Center(
+              child: Text("正在加载"),
+            );
+          }
+          return Container(
+            height: 30,
+            child: body,
+          );
+        },
+      ),
       child: ListView(
         //controller: _scrollController,
         physics: BouncingScrollPhysics(),

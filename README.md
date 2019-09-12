@@ -1,5 +1,6 @@
 # flutter_MyBilibili
-一个仿b站的flutter练习app
+
+一个基于flutter的高仿bilibili
 
 # 已经实现的功能
 * 首页
@@ -11,6 +12,7 @@
 	* 历史纪录
 * 播放界面，
 	* 可以看到视频信息和评论（评论暂时只做了前面的热评和一些最新的评论）
+	* 点击封面可以保存封面到相册
 * 频道
 	* 获取实时频道列表
 * 动态
@@ -33,29 +35,24 @@
 
 |              描述                        |       预览                  |
 | :----------------------------: | :-----------------------: |
-|     主页面       | ![home_recommend](screenshot/home_recommend.jpg) |
-|       推荐视频     | ![home_recommend](screenshot/home_recommend.jpg) |
-|       直播     | ![home_live1](screenshot/home_live1.jpg)  |
-|      追番      | ![home_mybangumi](screenshot/home_mybangumi.jpg) |
-|      我的      | ![drawer](screenshot/drawer.jpg) |
-|      频道      | ![](screenshot/channel.jpg) |
-|      动态      | ![](screenshot/dynamic.jpg) |
-|      会员购      | ![](screenshot/mall1.jpg) |
-|      播放界面      | ![](screenshot/play_detail.jpg) |
-|      搜索界面      | ![](screenshot/serach_index.jpg) |
-|      搜索结果      | ![](screenshot/search_result.jpg) |
-|      登陆      | ![](screenshot/login_index.jpg) |
-|      输入密码      | ![](screenshot/login_pwd1.jpg) |
+|     启动页       | ![splash](screenshot/splash.png) |
+|       推荐/直播     | ![home](screenshot/home.png) ![live](screenshot/live.png) |
+|       播放/评论页面     | ![play](screenshot/play.png) ![reply](screenshot/play_reply.png) |
+|     保存封面并查看    |![save_cover](screenshot/save_cover.png)![save_cover_ok](screenshot/save_cover_ok.png)|
+|      搜索推荐/搜索记录/结果      | ![search](screenshot/search.png) ![search_result](screenshot/search_result.png) |
+|  登陆/输入密码| ![login](screenshot/login.png) ![login_input_password](screenshot/login_input_password.png) |
+|      频道      | ![dynamic](screenshot/channel.png) |
+|      动态      | ![mall](screenshot/dynamic.png) |
+|      会员购      | ![play_detail](screenshot/mall.png) |
 
 
 # TODO
 
-* 搜索
-	* 搜索记录
-	* 热门推荐
-	* 搜索输入推荐
+- [x] 搜索
+	- [x] 搜索记录
+	- [x] 热门推荐
+	- [ ] 搜索输入推荐
 
-* 附加功能
-	* 封面保存
+- [x] 附加功能
+	- [x] 封面保存
 
-* 

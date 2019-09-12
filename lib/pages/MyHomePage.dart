@@ -4,6 +4,7 @@ import 'package:flutter_MyBilibili/MyAppBar/ChannelAppBar.dart';
 import 'package:flutter_MyBilibili/MyAppBar/DynamicsAppBar.dart';
 import 'package:flutter_MyBilibili/MyAppBar/HomeAppBar.dart';
 import 'package:flutter_MyBilibili/MyAppBar/MallAppBar.dart';
+import 'package:flutter_MyBilibili/icons/bilibili_icons.dart';
 import 'package:flutter_MyBilibili/pages/channel/ChannelPage.dart';
 import 'package:flutter_MyBilibili/pages/dynamic/DynamicPage.dart';
 import 'package:flutter_MyBilibili/pages/home/HomeTabBar.dart';
@@ -53,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
             title:Text("动态")
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_basket),
+              icon: Icon(BIcon.shop),
             title:Text("会员购")
           ),
         ],
@@ -84,8 +85,12 @@ class _MyHomePageState extends State<MyHomePage> {
                       },
                     ),
                     otherAccountsPictures: <Widget>[
-                      Icon(IconData(0xe6d3,fontFamily: "Bilibili"),color: Colors.white,size: 30,),
-                      Icon(IconData(0xe690,fontFamily: "Bilibili"),color: Colors.white,size: 30,),
+                      OutlineButton(
+                        child: Icon(IconData(0xe6d4,fontFamily: "Bilibili"),color: Colors.white,size: 20,),
+                        onPressed: (){},
+                      ),
+                      
+                      Icon(IconData(0xe690,fontFamily: "Bilibili"),color: Colors.white,size: 20,),
                     ],
                   ),
                   ListTile(

@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_MyBilibili/icons/bilibili_icons.dart';
 import 'package:flutter_MyBilibili/model/jsonmodel/ReviewItem.dart';
 import 'package:flutter_MyBilibili/tools/LineTools.dart';
 import 'package:flutter_MyBilibili/util/BilibiliAPI/GetReviewByAid.dart';
@@ -12,27 +12,26 @@ class ReviewsPage extends StatefulWidget {
 }
 
 class _ReviewsPageState extends State<ReviewsPage>
-    with AutomaticKeepAliveClientMixin<ReviewsPage>{
-  List<ReviewItem> reviewList=[];
+    with AutomaticKeepAliveClientMixin<ReviewsPage> {
+  List<ReviewItem> reviewList = [];
   //ReviewList reviewListfromjson;
-  int pages=0;
-  int length=0;
-  bool isgetok=false;
-  bool isloadfail=false;//假设没有加载失败
+  int pages = 0;
+  int length = 0;
+  bool isgetok = false;
+  bool isloadfail = false; //假设没有加载失败
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getReviewList();
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     // return Text("这个是评论列表"+aid);
-    if(isloadfail==true){
+    if (isloadfail == true) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -40,83 +39,61 @@ class _ReviewsPageState extends State<ReviewsPage>
             Container(
               height: 100,
               width: 100,
-              child: Image.asset("images/img_tips_error_load_error.png",),
+              child: Image.asset(
+                "images/img_tips_error_load_error.png",
+              ),
             ),
             Text("加载失败了"),
           ],
         ),
       );
-    }
-    else if(isgetok==true){
-      //return ReviewListView();
+    } else if (isgetok == true&&reviewList.length>0) {
       return reviewListView();
-
-    }
-    else{
+    } 
+    else if(isgetok==false){
       return Center(
-        child: Text("加载中.."),
+        child: CircularProgressIndicator(),
+      ); 
+    }
+    else {
+      return Center(
+        child: Text("再怎么找也没有啦"),
       );
     }
-
   }
 
-  void getReviewList() async{//首次进入
-    reviewList=await GetReviewByAid.getReviewByAid(widget.aid,1);
-    //reviewListfromjson=await GetUtilBilibili.getReviewByAid(aid);
-    //print(""+reviewList[0].message);
-    //print("get over");
-    if(reviewList.length!=0){
-      isgetok=true;//加载完毕
+  void getReviewList() async {
+    //首次进入
+    reviewList = await GetReviewByAid.getReviewByAid(widget.aid, 1);
+    if(reviewList==null){
+      isloadfail = true;
     }
-    else{
-      isloadfail=true;
+    else {
+      isgetok = true; //加载完毕
+      if(mounted)setState(() {});
     }
-    print("LOadlist");
-    loadReviewList();
-
   }
-  loadReviewList(){//加载
-    pages=reviewList.length;
-    /*
-    if(pages+10>reviewList.length){
-      pages+=reviewList.length%20;
-    }
-    else{
-      pages+=10;
-    }
-    */
-    setState(() {
 
-    });
-
-  }
   Future<Null> _onRefresh() async {
-    reviewList=await GetReviewByAid.getReviewByAid(widget.aid,1);
-    loadReviewList();
-    setState(() {
-    });
+    reviewList = await GetReviewByAid.getReviewByAid(widget.aid, 1);
+    if(mounted) setState(() {});
   }
 
-  Widget reviewListView(){
+  Widget reviewListView() {
     return RefreshIndicator(
       onRefresh: _onRefresh,
       child: ListView.builder(
         //physics: BouncingScrollPhysics(),
         shrinkWrap: true,
-        itemCount: pages,
-        itemBuilder: (context,i){
-          if(i>=pages){
-            loadReviewList();
-          }
+        itemCount: reviewList.length,
+        itemBuilder: (context, i) {
           return reviewTile(reviewList[i]);
-          //return Text("123");
         },
       ),
     );
-
   }
-  Widget reviewTile(ReviewItem review){
 
+  Widget reviewTile(ReviewItem review) {
     return Column(
       children: <Widget>[
         Padding(
@@ -127,14 +104,14 @@ class _ReviewsPageState extends State<ReviewsPage>
               Container(
                 width: 45,
                 alignment: Alignment.topCenter,
-                decoration: BoxDecoration(
-                ),
+                decoration: BoxDecoration(),
                 child: Container(
                   height: 35,
                   width: 35,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(17),
-                    image: DecorationImage(image: NetworkImage(review.pic)),//头像
+                    image:
+                        DecorationImage(image: NetworkImage(review.pic+"@100w_100h")), //头像
                   ),
                 ),
               ),
@@ -146,15 +123,30 @@ class _ReviewsPageState extends State<ReviewsPage>
                   children: <Widget>[
                     Row(
                       children: <Widget>[
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          margin: EdgeInsets.only(
+                            right: 10,
+                          ),
+                          child: Text(
+                            review.uname,
+                            style: TextStyle(
+                              color: review.vipStatus==1?Colors.pink:Colors.grey[700],
+                            ),
+                          ), //名字
+                        ),
+                        Icon(
+                          BIcon.level[review.level],
+                          color: BIcon.levelColor[review.level],
+                        ),
                         Expanded(
                           child: Container(
-                            alignment: Alignment.centerLeft,
-                            child: Text(review.uname,style: TextStyle(color: Colors.grey[700]),),//名字
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              "#" + review.floor.toString(),
+                              style: TextStyle(color: Colors.grey[600]),
+                            ), //楼层
                           ),
-                        ),
-                        Container(
-                          alignment: Alignment.center,
-                          child: Text("#"+review.floor.toString(),style: TextStyle(color: Colors.grey[600]),),//楼层
                         ),
                       ],
                     ),
@@ -163,43 +155,65 @@ class _ReviewsPageState extends State<ReviewsPage>
                     ),
                     Container(
                       alignment: Alignment.topLeft,
-                      child: Text(review.message,style: TextStyle(fontSize: 16),),//评论主体
+                      child: Text(
+                        review.message,
+                        style: TextStyle(fontSize: 16),
+                      ), //评论主体
                     ),
                     SizedBox(
                       height: 3,
                     ),
                     Row(
                       children: <Widget>[
-                        Expanded(
-                          flex: 1,
-                          child: Row(
-                            children: <Widget>[
-                              Icon(Icons.thumb_up,color: Colors.grey[500],size: 14,),
-                              Text(" "+(review.like==0?"":review.like.toString()),style: TextStyle(color: Colors.grey[500],fontSize: 12),),
-                            ],
-                          ),
+                        Row(
+                          children: <Widget>[
+                            Icon(
+                              BIcon.zan,
+                              color: Colors.grey[500],
+                              size: 14,
+                            ),
+                            Text(
+                              "  " +
+                                  (review.like == 0
+                                      ? ""
+                                      : review.like.toString()),
+                              style: TextStyle(
+                                  color: Colors.grey[500], fontSize: 12),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          width: 30,
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Icon(
+                              BIcon.cai,
+                              color: Colors.grey[500],
+                              size: 14,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          width: 30,
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Icon(
+                              BIcon.share,
+                              color: Colors.grey[500],
+                              size: 14,
+                            ),
+                          ],
                         ),
                         Expanded(
-                          flex: 1,
-                          child: Row(
-                            children: <Widget>[
-                              Icon(Icons.thumb_down,color: Colors.grey[500],size: 14,),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Row(
-                            children: <Widget>[
-                              Icon(Icons.share,color: Colors.grey[500],size: 14,),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
                           child: Container(
                             alignment: Alignment.centerRight,
-                            child:Icon(Icons.more_vert,color: Colors.grey[500],size: 18,),
+                            child: Icon(
+                              Icons.more_vert,
+                              color: Colors.grey[500],
+                              size: 18,
+                            ),
                           ),
                         ),
                       ],

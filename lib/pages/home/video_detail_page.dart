@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_MyBilibili/icons/bilibili_icons.dart';
 import 'package:flutter_MyBilibili/model/VideoItem.dart';
 import 'package:flutter_MyBilibili/model/VideoItemFromJson.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -123,7 +124,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                   child: Column(
                     children: <Widget>[
                       Icon(
-                        Icons.thumb_up,
+                        BIcon.zan,
                         color: Colors.grey[600],
                       ),
                       Text(
@@ -144,7 +145,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                   child: Column(
                     children: <Widget>[
                       Icon(
-                        Icons.thumb_down,
+                        BIcon.cai,
                         color: Colors.grey[600],
                       ),
                       Text(
@@ -164,22 +165,9 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                   padding: EdgeInsets.only(top: 7, bottom: 7),
                   child: Column(
                     children: <Widget>[
-                      Container(
-                        width: 23,
-                        height: 23,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: Colors.grey[600],
-                        ),
-                        child: Center(
-                          child: Text(
-                            "币",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 4,
+                      Icon(
+                        BIcon.icon,
+                        color: Colors.grey[600],
                       ),
                       Text(
                         "${widget.videoItemFromJson.coins.toString()}",
@@ -199,7 +187,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                   child: Column(
                     children: <Widget>[
                       Icon(
-                        Icons.star,
+                        BIcon.collection,
                         color: Colors.grey[600],
                       ),
                       Text("${widget.videoItemFromJson.favorites.toString()}",
@@ -221,7 +209,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                   child: Column(
                     children: <Widget>[
                       Icon(
-                        Icons.share,
+                        BIcon.share,
                         color: Colors.grey[600],
                       ),
                       Text("分享",
