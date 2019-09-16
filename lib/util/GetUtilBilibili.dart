@@ -215,13 +215,13 @@ class GetUtilBilibili {
     } finally {}
   }
 
-  static getSearchByKeyword(String keyword, int pn) async {
+  static getSearchByKeyword(String keyword, int pn,{String order="default"}) async {
     //获取搜索结果列表,pn为第几页,ps为页的大小
     try {
       List<VideoItem> searchresultlist = List<VideoItem>();
       HttpClient httpClient = new HttpClient();
       HttpClientRequest request = await httpClient.getUrl(Uri.parse(
-          "https://app.bilibili.com/x/v2/search?appkey=1d8b6e7d45233436&build=5370000&pn=${pn.toString()}&ps=15&keyword=${keyword}"));
+          "https://app.bilibili.com/x/v2/search?appkey=1d8b6e7d45233436&build=5370000&pn=${pn.toString()}&ps=15&keyword=$keyword&order=$order"));
       HttpClientResponse response = await request.close();
       var result = await response.transform(utf8.decoder).join();
       Map<String, dynamic> jsondata = json.decode(result);
@@ -232,6 +232,7 @@ class GetUtilBilibili {
           searchresultlist.add(VideoItem.fromSearchJson(item));
         }
       }
+      print(searchresultlist.toString());
       //print("resultlistlen"+searchresultlist.length.toString());
       //print("search get ok");
       httpClient.close();

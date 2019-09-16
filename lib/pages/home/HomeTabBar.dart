@@ -3,6 +3,7 @@ import 'package:flutter_MyBilibili/beans/ItemView.dart';
 import 'package:flutter_MyBilibili/pages/home/HotGridViewPage.dart';
 import 'package:flutter_MyBilibili/pages/home/MyBangumiPage.dart';
 import 'package:flutter_MyBilibili/pages/home/LiveListViewPage.dart';
+import 'package:flutter_MyBilibili/pages/home/RecommendPage.dart';
 
 
 class HomeTabBar extends StatefulWidget {
@@ -21,7 +22,7 @@ class _HomeTabBarState extends State<HomeTabBar> {
   ];
   final List<Widget> tabViews=[
     LiveListViewPage(),
-    HotGridViewPage(),
+    RecommendPage(),
     HotGridViewPage(),
     MyBangumi(),
     MyBangumi(),

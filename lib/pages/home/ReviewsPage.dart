@@ -103,17 +103,12 @@ class _ReviewsPageState extends State<ReviewsPage>
             children: <Widget>[
               Container(
                 width: 45,
-                alignment: Alignment.topCenter,
-                decoration: BoxDecoration(),
-                child: Container(
-                  height: 35,
-                  width: 35,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(17),
-                    image:
-                        DecorationImage(image: NetworkImage(review.pic+"@100w_100h")), //头像
-                  ),
-                ),
+                child: ClipOval(
+                  child: Image.network(
+                    review.pic+"@100w_100h",
+                    fit: BoxFit.cover,
+                    ),
+                )
               ),
               SizedBox(
                 width: 20,

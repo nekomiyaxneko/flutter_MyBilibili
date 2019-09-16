@@ -37,6 +37,18 @@ class BIcon {
   static const danmu_on=const _BIcon(0xe69d);
   //购物
   static const shop=const _BIcon(0xe601);
+  //播放量
+  static const play=const _BIcon(0xe66d);
+  //弹幕
+  static const danmaku=const _BIcon(0xe66a);
+  //搜索
+  static const search=const _BIcon(0xe679);
+  //播放-动作
+  static const play_action=const _BIcon(0xe6b0);
+  //全屏
+  static const full_screen=const _BIcon(0xe678);
+  //更多
+  static const more=const _BIcon(0xe693);
 
 }
 

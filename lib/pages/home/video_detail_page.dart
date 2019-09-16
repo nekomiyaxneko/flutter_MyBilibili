@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_MyBilibili/icons/bilibili_icons.dart';
 import 'package:flutter_MyBilibili/model/VideoItem.dart';
 import 'package:flutter_MyBilibili/model/VideoItemFromJson.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class VideoDetailPage extends StatefulWidget {
@@ -94,9 +96,9 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                 style: TextStyle(color: Colors.grey[600], fontSize: 12),
               ),
               GestureDetector(
-                onTap: () {
-                  openUrl(
-                      "https://www.bilibili.com/video/av${widget.videoitem.aid}");
+                onLongPress: () {
+                  Clipboard.setData(ClipboardData(text:"AV${widget.videoitem.aid}"));
+                  Fluttertoast.showToast(msg: "已复制av号到粘贴板");
                 },
                 child: Text(
                   "  AV${widget.videoitem.aid}",

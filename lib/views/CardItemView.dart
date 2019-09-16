@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_MyBilibili/icons/bilibili_icons.dart';
 import 'package:flutter_MyBilibili/model/VideoItem.dart';
 
 class CardItemView extends StatelessWidget {
@@ -18,7 +19,7 @@ class CardItemView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Expanded(
-            flex: 5,
+            flex: 4,
             child: Hero(
               tag: "${carditem.id}",
               child: Container(
@@ -36,7 +37,7 @@ class CardItemView extends StatelessWidget {
                 alignment: Alignment.bottomCenter,
                 child: Container(
                   width: double.infinity,
-                  padding: EdgeInsets.only(top: 20,bottom: 2,left: 2,right: 2),
+                  padding: EdgeInsets.only(top: 30,bottom: 2,left: 10,right: 10),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
@@ -44,10 +45,31 @@ class CardItemView extends StatelessWidget {
                       colors: [Color.fromRGBO(0, 0, 0, 0.01),Colors.black54]
                     ),
                   ),
-                  child: Text("播放 "+carditem.view+" 弹幕 "+carditem.danmu+" "+carditem.time,
-                    style: TextStyle(color: Colors.white,fontSize: 12),
-                    maxLines: 1,
-                    )
+                  child: 
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(BIcon.play,color: Colors.white,size: 15,),
+                          Text("${carditem.view}   ",style: TextStyle(fontSize: 12,color: Colors.white),),
+                          Icon(BIcon.danmaku,color: Colors.white,size: 15,),
+                          Text("${carditem.danmu}",style: TextStyle(fontSize: 12,color: Colors.white),),
+
+                        ],
+                      ),
+                      Expanded(
+                        child: Text("${carditem.time}",textAlign: TextAlign.right,style: TextStyle(fontSize: 12,color: Colors.white),),
+                      ),
+                    
+                  ],),
+                  // Text("播放 "+carditem.view+" 弹幕 "+carditem.danmu+" "+carditem.time,
+                  //   style: TextStyle(color: Colors.white,fontSize: 12),
+                  //   maxLines: 1,
+                  //   )
                   
                 )
               ),
