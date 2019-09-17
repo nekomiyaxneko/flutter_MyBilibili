@@ -334,7 +334,7 @@ class HotUpView extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
-        height: 200,
+        height: 190,
         margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
         child: Column(
           children: <Widget>[
@@ -427,9 +427,9 @@ class HotUpVideoView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100,
-      width: 150,
-      margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+      height: 90,
+      width: 130,
+      margin: EdgeInsets.fromLTRB(0, 10, 10, 0),
       child: new Column(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -442,10 +442,7 @@ class HotUpVideoView extends StatelessWidget {
                   image: DecorationImage(
                       image: NetworkImage(item.cover + "@320w_200h"),
                       fit: BoxFit.fitHeight),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(5.0),
-                    topRight: Radius.circular(5.0),
-                  ),
+                  borderRadius: BorderRadius.circular(5)
                 ),
                 alignment: Alignment.bottomCenter,
                 child: Container(
