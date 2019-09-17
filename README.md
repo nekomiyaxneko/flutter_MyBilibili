@@ -1,6 +1,6 @@
 # flutter_MyBilibili
 
-flutter bilibili 学习 高仿
+flutter bilibili 学习 高仿 播放
 
 # 已经实现的功能
 * 首页
