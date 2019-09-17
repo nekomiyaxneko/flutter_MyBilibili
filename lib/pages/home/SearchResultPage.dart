@@ -210,7 +210,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
           Navigator.push(
               context,
               new MaterialPageRoute(
-                  builder: (contex) => new VideoPlayPage(item))); //打开视频
+                  builder: (contex) => new VideoPlayPage(item.aid))); //打开视频
         },
         child: Column(
           children: <Widget>[

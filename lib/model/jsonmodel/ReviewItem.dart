@@ -6,8 +6,10 @@ class ReviewItem{
   int like;
   int level;
   int vipStatus;
+  int ctime;
   ReviewItem(Map<String, dynamic> jsondata){
     this.floor=jsondata["floor"];
+    this.ctime=jsondata["ctime"];
     this.like=jsondata["like"];
     this.message=jsondata["content"]["message"];
     this.pic=jsondata["member"]["avatar"];

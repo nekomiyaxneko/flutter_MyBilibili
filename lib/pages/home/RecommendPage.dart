@@ -82,7 +82,7 @@ class _RecommendPageState extends State<RecommendPage>
               Navigator.push(
                   context,
                   new MaterialPageRoute(
-                      builder: (contex) => new VideoPlayPage(listData[index])));
+                      builder: (contex) => new VideoPlayPage(listData[index].aid)));
             },
             onLongPress: () {
               openUrl(listData[index].cover);

@@ -276,6 +276,7 @@ class _MyChewieMaterialControlsState extends State<MyChewieMaterialControls> {
   }
 
   Widget _buildPosition(Color iconColor) {
+    //TODO 添加弹幕监听器
     final position = _latestValue != null && _latestValue.position != null
         ? _latestValue.position
         : Duration.zero;

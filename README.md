@@ -1,10 +1,11 @@
 # flutter_MyBilibili
 
-一个基于flutter的高仿bilibili
+flutter bilibili 学习 高仿
 
 # 已经实现的功能
 * 首页
 	* 推荐-下拉刷新，加载更多
+	* 热门top100下拉刷新，加载更多
 	* 直播-下拉刷新
 * 搜索
 	* 支持关键字和av号搜索
@@ -28,12 +29,7 @@
 	  * 简单的登陆界面
 	  * 输入密码时候2233会遮住眼睛
 
-# 获取方式
 
-### 点击链接下载安装包
-[下载](release/app-release.apk)
-
-### clone本项目自行build
 
 # 界面
 
@@ -41,15 +37,21 @@
 | :----------------------------: | :-----------------------: |
 |     启动页       | ![splash](screenshot/splash.png) |
 |       推荐/直播     | ![home](screenshot/home.png) ![live](screenshot/live.png) |
-|       播放页面     | ![play](screenshot/play.png) ![play2](screenshot/play2.png) ![play](screenshot/play_full_screen.png) |
-|       评论页面     | ![reply](screenshot/play_reply.png) |
+|       热门     | ![home](screenshot/home_hot_1.png) ![live](screenshot/home_hot_2.png) |
+|       播放/评论页面     | ![play2](screenshot/play_2.png) ![reply](screenshot/play_reply.png) |
 |     保存封面并查看    |![save_cover](screenshot/save_cover.png)![save_cover_ok](screenshot/save_cover_ok.png)|
-|     搜索推荐/搜索记录/结果     | ![search](screenshot/search_index.png) |
-|      搜索结果/筛选      | ![search](screenshot/search_result.png) ![search](screenshot/search_result1.png) ![search_result](screenshot/search_result2.png) |
+|     搜索推荐/搜索记录/结果     | ![search](screenshot/search_index.png)   ![search](screenshot/search_result_1.png) |
+|      搜索结果/筛选      |  ![search](screenshot/search_result_2.png) ![search_result](screenshot/search_result_3.png) |
 |  登陆/输入密码| ![login](screenshot/login.png) ![login_input_password](screenshot/login_input_password.png) |
 |      频道      | ![dynamic](screenshot/channel.png) |
 |      动态      | ![mall](screenshot/dynamic.png) |
 |      会员购      | ![play_detail](screenshot/mall.png) |
+
+
+# 获取方式
+
+### 点击链接下载安装包
+[下载](release/app-release.apk)
 
 
 # TODO
@@ -57,8 +59,11 @@
 - [x] 搜索
 	- [x] 搜索记录
 	- [x] 热门推荐
-	- [ ] 搜索输入推荐
-
+- [ ] 番剧列表
+- [ ] 影视列表
+- [ ] 70周年列表
+- [ ] 热门动态
+- [ ] up主信息
 - [x] 附加功能
 	- [x] 封面保存
 

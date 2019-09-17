@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_MyBilibili/icons/bilibili_icons.dart';
-import 'package:flutter_MyBilibili/model/VideoItem.dart';
 import 'package:flutter_MyBilibili/model/VideoItemFromJson.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class VideoDetailPage extends StatefulWidget {
   final VideoItemFromJson videoItemFromJson;
-  final VideoItem videoitem;
-  VideoDetailPage(this.videoItemFromJson, this.videoitem);
+  final String aid;
+  VideoDetailPage(this.videoItemFromJson, this.aid);
   @override
   _VideoDetailPageState createState() => _VideoDetailPageState();
 }
 
 class _VideoDetailPageState extends State<VideoDetailPage> {
+  String aid;
+  @override
+  void initState() {
+    aid = widget.aid;
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -88,20 +96,20 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
           Row(
             children: <Widget>[
               Text(
-                "播放 ${widget.videoitem.view}",
+                "播放 ${numberFomat(widget.videoItemFromJson.play)}",
                 style: TextStyle(color: Colors.grey[600], fontSize: 12),
               ),
               Text(
-                "  弹幕 ${widget.videoitem.danmu}",
+                "  弹幕 ${numberFomat(widget.videoItemFromJson.review)}",
                 style: TextStyle(color: Colors.grey[600], fontSize: 12),
               ),
               GestureDetector(
                 onLongPress: () {
-                  Clipboard.setData(ClipboardData(text:"AV${widget.videoitem.aid}"));
+                  Clipboard.setData(ClipboardData(text: "AV${widget.aid}"));
                   Fluttertoast.showToast(msg: "已复制av号到粘贴板");
                 },
                 child: Text(
-                  "  AV${widget.videoitem.aid}",
+                  "  AV${widget.aid}",
                   style: TextStyle(color: Colors.pink[300], fontSize: 12),
                 ),
               ),
@@ -224,6 +232,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                 ),
                 onPressed: () {
                   //分享
+                  Share.share("https://www.bilibili.com/video/av$aid");
                 },
               )),
             ],
@@ -232,12 +241,20 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
       ),
     );
   }
-  
-openUrl(String url) async {
-  if (await canLaunch(url)) {
-    await launch(url);
-  } else {
-    throw "no";
+
+  numberFomat(int n) {
+    if (n > 10000) {
+      return (n / 10000).toStringAsFixed(1);
+    } else {
+      return n.toString();
+    }
   }
-}
+
+  openUrl(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw "no";
+    }
+  }
 }

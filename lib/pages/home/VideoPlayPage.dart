@@ -1,7 +1,5 @@
 import 'dart:typed_data';
 import 'package:chewie/chewie.dart';
-import 'package:chewie/src/material_controls.dart';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_MyBilibili/icons/bilibili_icons.dart';
@@ -19,26 +17,24 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayPage extends StatefulWidget {
-  @override
-  final VideoItem videoitem; //视频基本信息，av号封面
-  VideoPlayPage(this.videoitem);
-  _VideoPlayPageState createState() => _VideoPlayPageState(videoitem);
+  final String aid;
+  VideoPlayPage(this.aid);
+  @override//视频基本信息，av号封面
+  _VideoPlayPageState createState() => _VideoPlayPageState();
 }
 
 class _VideoPlayPageState extends State<VideoPlayPage> {
   var _videoplayscaffoldkey = new GlobalKey<ScaffoldState>(); //key的用法
-  final VideoItem videoitem;
+  String aid;
   VideoItemFromJson videoItemFromJson; //视频详细信息，介绍等
   TabController _tabController =
       TabController(length: 2, vsync: AnimatedListState());
   VideoPlayerController _videoController;
   ChewieController _chewieController;
   bool _getvideodetailisok = false;
-  bool isclickcover = false;
-  bool _isHideTitle = true;
-  _VideoPlayPageState(this.videoitem);
   @override
   void initState() {
+    aid=widget.aid;
     //设置封面滚动监听，隐藏标题
     // _nestedScrollViewController.addListener(() {
     //   if (_nestedScrollViewController.offset > 110 && _isHideTitle == true) {
@@ -68,7 +64,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
 
   void getDetail() async {
     videoItemFromJson =
-        await GetUtilBilibili.getVideoDetailByAid(videoitem.aid);
+        await GetUtilBilibili.getVideoDetailByAid(aid);
     if (videoItemFromJson != null) {
       _getvideodetailisok = true;
       print("getDetailok");
@@ -84,7 +80,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
   }
 
   void setVideoUrl({int page}) async {
-    var url = await VideoApi.getVideoPlayUrl(videoitem.aid, page: page);
+    var url = await VideoApi.getVideoPlayUrl(aid, page: page);
     print("url: " + url);
     if (url == null) {
       Fluttertoast.showToast(msg: "获取视频播放地址失败");
@@ -215,9 +211,9 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
           ? TabBarView(
               controller: _tabController,
               children: <Widget>[
-                VideoDetailPage(videoItemFromJson, videoitem),
+                VideoDetailPage(videoItemFromJson, aid),
                 ReviewsPage(
-                  videoitem.aid,
+                  aid,
                 ),
               ],
             )
@@ -245,7 +241,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
             child: Text("确定"),
             onPressed: () async {
               Navigator.pop(context);
-              await _saveCover(videoitem.cover);
+              await _saveCover(videoItemFromJson.pic);
             },
           ),
         ],

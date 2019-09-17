@@ -3,6 +3,7 @@ import 'package:flutter_MyBilibili/icons/bilibili_icons.dart';
 import 'package:flutter_MyBilibili/model/jsonmodel/ReviewItem.dart';
 import 'package:flutter_MyBilibili/tools/LineTools.dart';
 import 'package:flutter_MyBilibili/util/BilibiliAPI/GetReviewByAid.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ReviewsPage extends StatefulWidget {
   final String aid;
@@ -17,8 +18,11 @@ class _ReviewsPageState extends State<ReviewsPage>
   //ReviewList reviewListfromjson;
   int pages = 0;
   int length = 0;
+  int next=0;
   bool isgetok = false;
   bool isloadfail = false; //假设没有加载失败
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   @override
   bool get wantKeepAlive => true;
   @override
@@ -64,24 +68,54 @@ class _ReviewsPageState extends State<ReviewsPage>
 
   void getReviewList() async {
     //首次进入
-    reviewList = await GetReviewByAid.getReviewByAid(widget.aid, 1);
-    if(reviewList==null){
+    var resHot = await GetReviewByAid.getHotReviewByAid(widget.aid,);
+    var res = await GetReviewByAid.getReviewByAid(widget.aid,);
+    if(resHot==null&&res==null){
       isloadfail = true;
     }
     else {
       isgetok = true; //加载完毕
+      if(resHot!=null)reviewList.addAll(resHot);
+      if(res!=null)reviewList.addAll(res);
+      next=reviewList[reviewList.length-1].floor;
       if(mounted)setState(() {});
     }
   }
 
   Future<Null> _onRefresh() async {
-    reviewList = await GetReviewByAid.getReviewByAid(widget.aid, 1);
+    var resHot = await GetReviewByAid.getHotReviewByAid(widget.aid,);
+    var res = await GetReviewByAid.getReviewByAid(widget.aid,);
+    if(resHot==null&&res==null){
+      isloadfail = true;
+    }
+    else {
+      isgetok = true; //加载完毕
+      reviewList.clear();
+      if(resHot!=null)reviewList.addAll(resHot);
+      if(res!=null)reviewList.addAll(res);
+      next=reviewList[reviewList.length-1].floor;
+      if(mounted)setState(() {});
+    }
+  }
+
+  Future<Null> _moreReview() async {
+    if(next<20) {
+      _refreshController.loadNoData();
+      return;
+    }
+    var res = await GetReviewByAid.getReviewByAid(widget.aid,next: next.toString());
+    if(res!=null) reviewList.addAll(res);
+    next=reviewList[reviewList.length-1].floor;
+    _refreshController.loadComplete();
     if(mounted) setState(() {});
   }
 
   Widget reviewListView() {
-    return RefreshIndicator(
+    return SmartRefresher(
+      enablePullUp: true,
+      onLoading: _moreReview,
       onRefresh: _onRefresh,
+      controller: _refreshController,
       child: ListView.builder(
         //physics: BouncingScrollPhysics(),
         shrinkWrap: true,

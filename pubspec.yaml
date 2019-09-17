@@ -28,13 +28,14 @@ dependencies:
   chewie: ^0.9.8
   url_launcher: ^5.1.2
   flutter_swiper: ^1.1.6
-  pull_to_refresh: ^1.5.0
+  pull_to_refresh: ^1.5.6
   shared_preferences: ^0.5.3+4
   image_gallery_saver: ^1.2.1
   dio: ^2.1.16
   permission_handler: ^3.2.2
   fluttertoast: ^3.1.3
   video_player: ^0.10.2+1
+  share: ^0.6.2+1
   #gzx_dropdown_menu: ^1.0.3
 
 
@@ -76,6 +77,8 @@ flutter:
     - images/ic_tv_play.png
     - images/ic_tv_play_large.png
     - images/小电视.png
+    - images/bilibili_no_network.jpg
+    - images/bilibili_loading.jpg
     - assets/html/bilibili.html
     - assets/html/hello.html
   #  - images/a_dot_ham.jpeg
