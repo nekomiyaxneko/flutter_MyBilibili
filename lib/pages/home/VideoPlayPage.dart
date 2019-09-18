@@ -26,6 +26,7 @@ class VideoPlayPage extends StatefulWidget {
 class _VideoPlayPageState extends State<VideoPlayPage> {
   var _videoplayscaffoldkey = new GlobalKey<ScaffoldState>(); //key的用法
   String aid;
+  int replayCount=0;
   VideoItemFromJson videoItemFromJson; //视频详细信息，介绍等
   TabController _tabController =
       TabController(length: 2, vsync: AnimatedListState());
@@ -128,6 +129,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
 
   @override
   Widget build(BuildContext context) {
+    print("replaycount "+replayCount.toString());
     return Scaffold(
       key: _videoplayscaffoldkey,
       appBar: PreferredSize(
@@ -180,7 +182,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
                           text: "简介",
                         ),
                         Tab(
-                          text: "评论",
+                          text:replayCount==0?"评论":"评论 ${replayCount.toString()}",
                         )
                       ],
                     ),
@@ -214,6 +216,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
                 VideoDetailPage(videoItemFromJson, aid),
                 ReviewsPage(
                   aid,
+                  replayCount,
                 ),
               ],
             )

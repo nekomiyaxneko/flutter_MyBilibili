@@ -6,27 +6,27 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final AssetImage inputaccountlogo=AssetImage("images/login_logo_account.png");
-  final AssetImage inputpasswordlogo=AssetImage("images/login_logo_password.png");
+  String accountLogo="images/login_logo_account.png";
+  String passwordLogo="images/login_logo_password.png";
   final FocusNode _passwordfocusnode=FocusNode();
-  AssetImage logo;
+  String logo;
   String account="";
   String password="";
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    logo=inputaccountlogo;
+    logo=accountLogo;
     _passwordfocusnode.addListener(_passwordListener);
   }
   Future<Null> _passwordListener()async {//当光标在密码栏时切换logo
     if(_passwordfocusnode.hasFocus){
-      logo=inputpasswordlogo;
+      logo=passwordLogo;
       setState(() {
       });
     }
     if(!_passwordfocusnode.hasFocus){
-      logo=inputaccountlogo;
+      logo=accountLogo;
       setState(() {
       });
     }
@@ -53,9 +53,7 @@ class _LoginPageState extends State<LoginPage> {
               children: <Widget>[
                 Container(
                   height: 100,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(image: logo),
-                  ),
+                  child: Image.asset(logo,gaplessPlayback: true,),
                 ),
                 Container(//账号输入框
                   margin: EdgeInsets.fromLTRB(20, 10, 20, 10),

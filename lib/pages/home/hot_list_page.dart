@@ -54,12 +54,14 @@ class _HotListPageState extends State<HotListPage>
           Widget body;
           if (mode == LoadStatus.loading) {
             body = CupertinoActivityIndicator();
-          } else if (mode == LoadStatus.noMore) {
-            body = Text("没有更多了");
-          } else {
-            body = Center(
-              child: Text("没有更多了"),
-            );
+          } else if (mode == LoadStatus.idle) {
+            body = Text("上划加载更多");
+          }
+          else if(mode == LoadStatus.canLoading){
+            body = Text("松开加载更多");
+          } 
+          else {
+            body = Text("已经到达热门尽头了");
           }
           return Container(
             height: 20,

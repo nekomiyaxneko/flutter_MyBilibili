@@ -6,11 +6,12 @@ flutter bilibili 学习 高仿 播放
 * 首页
 	* 推荐-下拉刷新，加载更多
 	* 热门top100下拉刷新，加载更多
+	* 追番页面
 	* 直播-下拉刷新
 * 搜索
 	* 支持关键字和av号搜索
 	* 热搜推荐和搜索记录
-	* 按照默认/播放量/弹幕数/新发布排序
+	* 支持按照默认/播放量/弹幕数/新发布排序
 * 播放界面
 	* **可以播放视频了！**
 	* 可以看到视频信息和评论（评论暂时只做了前面的热评和一些最新的评论）
@@ -25,9 +26,7 @@ flutter bilibili 学习 高仿 播放
 * 我的
 	* 显示头像，昵称、等
 	* 设置界面
-	* 登陆
-	  * 简单的登陆界面
-	  * 输入密码时候2233会遮住眼睛
+	* 简单登陆界面和彩蛋
 
 
 
@@ -37,7 +36,8 @@ flutter bilibili 学习 高仿 播放
 | :----------------------------: | :-----------------------: |
 |     启动页       | ![splash](screenshot/splash.png) |
 |       推荐/直播     | ![home](screenshot/home.png) ![live](screenshot/live.png) |
-|       热门     | ![home](screenshot/home_hot_1.png) ![live](screenshot/home_hot_2.png) |
+|       热门列表     | ![home](screenshot/home_hot_1.png) ![live](screenshot/home_hot_2.png) |
+|       追番列表     | ![home](screenshot/home_bangumi_1.png) ![live](screenshot/home_bangumi_2.png) |
 |       播放/评论页面     | ![play2](screenshot/play_2.png) ![reply](screenshot/play_reply.png) |
 |     保存封面并查看    |![save_cover](screenshot/save_cover.png)![save_cover_ok](screenshot/save_cover_ok.png)|
 |     搜索推荐/搜索记录/结果     | ![search](screenshot/search_index.png)   ![search](screenshot/search_result_1.png) |

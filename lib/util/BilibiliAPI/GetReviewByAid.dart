@@ -63,4 +63,27 @@ class GetReviewByAid {
       return null;
     } finally {}
   }
+  static getReplayCountByAid(String aid) async {
+    //51639674
+    try {
+      int count=0;
+      HttpClient httpClient = new HttpClient();
+      HttpClientRequest request = await httpClient.getUrl(Uri.parse(
+          "https://api.bilibili.com/x/v2/reply/main?appkey=1d8b6e7d45233436&build=5370000&mobi_app=android&type=1&oid=" +
+              aid));
+
+      HttpClientResponse response = await request.close();
+      var result = await response.transform(utf8.decoder).join();
+      Map<String, dynamic> jsondata = json.decode(result);
+      if (jsondata["data"]["cursor"]["all_count"] != null) {
+        count=jsondata["data"]["cursor"]["all_count"];
+      }
+
+      httpClient.close();
+      return count;
+    } catch (e) {
+      print("请求失败");
+      return 0;
+    } finally {}
+  }
 }

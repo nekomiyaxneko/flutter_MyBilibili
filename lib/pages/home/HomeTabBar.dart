@@ -3,6 +3,7 @@ import 'package:flutter_MyBilibili/beans/ItemView.dart';
 import 'package:flutter_MyBilibili/pages/home/MyBangumiPage.dart';
 import 'package:flutter_MyBilibili/pages/home/LiveListViewPage.dart';
 import 'package:flutter_MyBilibili/pages/home/RecommendPage.dart';
+import 'package:flutter_MyBilibili/pages/home/bangumi_list_page.dart';
 import 'package:flutter_MyBilibili/pages/home/hot_list_page.dart';
 
 
@@ -24,7 +25,7 @@ class _HomeTabBarState extends State<HomeTabBar> {
     LiveListViewPage(),
     RecommendPage(),
     HotListPage(),
-    MyBangumi(),
+    BangumiListPage(),
     MyBangumi(),
     MyBangumi(),
   ];

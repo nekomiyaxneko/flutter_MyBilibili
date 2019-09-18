@@ -244,7 +244,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
 
   numberFomat(int n) {
     if (n > 10000) {
-      return (n / 10000).toStringAsFixed(1);
+      return (n / 10000).toStringAsFixed(1)+"万";
     } else {
       return n.toString();
     }

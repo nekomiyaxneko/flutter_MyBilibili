@@ -7,7 +7,8 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ReviewsPage extends StatefulWidget {
   final String aid;
-  ReviewsPage(this.aid);
+  int replayCount;
+  ReviewsPage(this.aid,this.replayCount);
   @override
   _ReviewsPageState createState() => _ReviewsPageState();
 }
@@ -68,8 +69,10 @@ class _ReviewsPageState extends State<ReviewsPage>
 
   void getReviewList() async {
     //首次进入
+    var count= await GetReviewByAid.getReplayCountByAid(widget.aid,);
     var resHot = await GetReviewByAid.getHotReviewByAid(widget.aid,);
     var res = await GetReviewByAid.getReviewByAid(widget.aid,);
+    widget.replayCount=count;
     if(resHot==null&&res==null){
       isloadfail = true;
     }
@@ -94,12 +97,13 @@ class _ReviewsPageState extends State<ReviewsPage>
       if(resHot!=null)reviewList.addAll(resHot);
       if(res!=null)reviewList.addAll(res);
       next=reviewList[reviewList.length-1].floor;
+      _refreshController.refreshCompleted();
       if(mounted)setState(() {});
     }
   }
 
   Future<Null> _moreReview() async {
-    if(next<20) {
+    if(next<10) {
       _refreshController.loadNoData();
       return;
     }
