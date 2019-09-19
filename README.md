@@ -7,6 +7,8 @@ flutter bilibili 学习 高仿 播放
 	* 推荐-下拉刷新，加载更多
 	* 热门top100下拉刷新，加载更多
 	* 追番页面
+	* 影视页面
+	* 70周年页面
 	* 直播-下拉刷新
 * 搜索
 	* 支持关键字和av号搜索
@@ -33,18 +35,19 @@ flutter bilibili 学习 高仿 播放
 # 界面
 
 |              描述                        |       预览                  |
-| :----------------------------: | :-----------------------: |
+| :---------------------------- | :----------------------- |
 |     启动页       | ![splash](screenshot/splash.png) |
 |       推荐/直播     | ![home](screenshot/home.png) ![live](screenshot/live.png) |
 |       热门列表     | ![home](screenshot/home_hot_1.png) ![live](screenshot/home_hot_2.png) |
 |       追番列表     | ![home](screenshot/home_bangumi_1.png) ![live](screenshot/home_bangumi_2.png) |
+|       影视列表     | ![home](screenshot/home_cinema_1.png) ![live](screenshot/home_cinema_2.png) |
+|       70周年     | ![home](screenshot/home_70th_1.png) ![live](screenshot/home_70th_2.png) |
 |       播放/评论页面     | ![play2](screenshot/play_2.png) ![reply](screenshot/play_reply.png) |
 |     保存封面并查看    |![save_cover](screenshot/save_cover.png)![save_cover_ok](screenshot/save_cover_ok.png)|
 |     搜索推荐/搜索记录/结果     | ![search](screenshot/search_index.png)   ![search](screenshot/search_result_1.png) |
 |      搜索结果/筛选      |  ![search](screenshot/search_result_2.png) ![search_result](screenshot/search_result_3.png) |
 |  登陆/输入密码| ![login](screenshot/login.png) ![login_input_password](screenshot/login_input_password.png) |
-|      频道      | ![dynamic](screenshot/channel.png) |
-|      动态      | ![mall](screenshot/dynamic.png) |
+|      频道/动态      | ![dynamic](screenshot/channel.png) ![mall](screenshot/dynamic.png) |
 |      会员购      | ![play_detail](screenshot/mall.png) |
 
 

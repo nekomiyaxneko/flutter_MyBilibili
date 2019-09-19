@@ -68,17 +68,17 @@ class _BangumiListPageState extends State<BangumiListPage> {
     ]),
   ];
   Future<Null> _onrefresh() async {
-    await Future.delayed(Duration(seconds: 1)).then((_) {
-      _refreshController.loadComplete();
-      if (mounted) setState(() {});
-      print("load ok");
+    await Future.delayed(Duration(seconds: 1),(){
+      _refreshController.refreshCompleted();
+      if(mounted) setState(() {
+        
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return SmartRefresher(
-      enablePullDown: false,
       controller: _refreshController,
       onRefresh: _onrefresh,
       child: ListView.builder(
@@ -122,7 +122,7 @@ class _BangumiListPageState extends State<BangumiListPage> {
                 decoration: BoxDecoration(
                   image: DecorationImage(
                       image: NetworkImage(
-                        banners.regions[i].cover,
+                        banners.regions[i].cover+ "@600w_600h",
                       ),
                       fit: BoxFit.fitHeight),
                 ),
@@ -159,7 +159,7 @@ class _BangumiListPageState extends State<BangumiListPage> {
               (i) {
                 return Tab(
                   icon: Image.network(
-                    i.icon,
+                    i.icon+ "@100w_100h",
                     fit: BoxFit.fitHeight,
                     height: 30,
                   ),
@@ -219,7 +219,7 @@ class _BangumiListPageState extends State<BangumiListPage> {
                           decoration: BoxDecoration(
                             image: DecorationImage(
                                 image: NetworkImage(
-                                  bangumiTile.list[i].cover,
+                                  bangumiTile.list[i].cover+ "@320w_200h",
                                 ),
                                 fit: BoxFit.cover),
                           ),

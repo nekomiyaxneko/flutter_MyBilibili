@@ -178,7 +178,7 @@ class _HotListPageState extends State<HotListPage>
   }
 
   Future<Null> _onLoading() async {
-    if (_hotList.length > 100) {
+    if (_hotList.length >= 100) {
       _refreshController.loadNoData();
     } else {
       var res = await getHotList();

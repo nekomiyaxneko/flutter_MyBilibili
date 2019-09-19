@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_MyBilibili/beans/ItemView.dart';
+import 'package:flutter_MyBilibili/pages/home/70th_anniversary_page.dart';
 import 'package:flutter_MyBilibili/pages/home/MyBangumiPage.dart';
 import 'package:flutter_MyBilibili/pages/home/LiveListViewPage.dart';
 import 'package:flutter_MyBilibili/pages/home/RecommendPage.dart';
 import 'package:flutter_MyBilibili/pages/home/bangumi_list_page.dart';
+import 'package:flutter_MyBilibili/pages/home/cinema_list_page.dart';
 import 'package:flutter_MyBilibili/pages/home/hot_list_page.dart';
 
 
@@ -26,8 +28,8 @@ class _HomeTabBarState extends State<HomeTabBar> {
     RecommendPage(),
     HotListPage(),
     BangumiListPage(),
-    MyBangumi(),
-    MyBangumi(),
+    CinemaListPage(),
+    C70thAnniversaryPage(),
   ];
   @override
   Widget build(BuildContext context) {
