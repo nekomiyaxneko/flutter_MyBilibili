@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_MyBilibili/icons/bilibili_icons.dart';
 import "package:flutter_MyBilibili/model/jsonmodel/LiveItem.dart";
-import 'package:flutter_MyBilibili/util/GetUtilBilibili.dart';
+import 'package:flutter_MyBilibili/pages/home/live_play_page.dart';
+import 'package:flutter_MyBilibili/tools/MyMath.dart';
+import 'package:flutter_MyBilibili/util/BilibiliAPI/live_api.dart';
 import 'package:flutter_MyBilibili/tools/LineTools.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 
 class LiveListViewPage extends StatefulWidget {
   @override
@@ -10,12 +14,11 @@ class LiveListViewPage extends StatefulWidget {
 
 class _LiveListViewPageState extends State<LiveListViewPage>
     with AutomaticKeepAliveClientMixin<LiveListViewPage> {
-  final List<LivePartition> livepartitionlist = [];
+  final List _list = [];
   ScrollController _listviewscrollController =
       ScrollController(); //listview的控制器
   ScrollController _gridviewscrollController =
       ScrollController(); //gridview的控制器
-  int listviewlen = 0;
   bool isaddok = false;
   @override
   void initState() {
@@ -24,22 +27,18 @@ class _LiveListViewPageState extends State<LiveListViewPage>
   }
 
   addCard() async {
-    livepartitionlist.addAll(await GetUtilBilibili.getLivePartition());
-    print("list add ok");
-    print("listlen " + livepartitionlist.length.toString());
-    if (livepartitionlist.length != 0) {
+    _list.addAll(await LiveApi.getLiveList());
+    if (_list.length != 0) {
       isaddok = true;
     }
-    listviewlen = livepartitionlist.length + 1;
     if (this.mounted) {
       setState(() {});
     }
   }
 
   Future<void> _onRefresh() async {
-    livepartitionlist.clear();
-    livepartitionlist.addAll(await GetUtilBilibili.getLivePartition());
-    listviewlen = livepartitionlist.length + 1;
+    _list.clear();
+    _list.addAll(await LiveApi.getLiveList());
     if (this.mounted) {
       setState(() {});
     }
@@ -47,6 +46,7 @@ class _LiveListViewPageState extends State<LiveListViewPage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         //直播按钮
@@ -55,7 +55,11 @@ class _LiveListViewPageState extends State<LiveListViewPage>
         },
         child: Padding(
           padding: EdgeInsets.all(5),
-          child: Text("我要直播",style: TextStyle(color: Colors.white,fontSize: 15),textAlign: TextAlign.center,),
+          child: Text(
+            "我要直播",
+            style: TextStyle(color: Colors.white, fontSize: 15),
+            textAlign: TextAlign.center,
+          ),
         ),
         backgroundColor: Colors.pink[300],
       ),
@@ -71,12 +75,16 @@ class _LiveListViewPageState extends State<LiveListViewPage>
         child: ListView.builder(
           physics: AlwaysScrollableScrollPhysics(),
           controller: _listviewscrollController,
-          itemCount: listviewlen,
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              return buildPartition();
+          itemCount: _list.length,
+          itemBuilder: (context, i) {
+            if (_list[i] is LivePartition) {
+              return buildLivePartition(_list[i]);
+            } else if (_list[i] is Banners) {
+              return buildBanners(_list[i]);
+            } else if (_list[i] is AreaCard) {
+              return buildAreaCard(_list[i]);
             } else {
-              return buildLivePartition(livepartitionlist[index - 1]);
+              return Container();
             }
           },
         ),
@@ -88,11 +96,39 @@ class _LiveListViewPageState extends State<LiveListViewPage>
     }
   }
 
-  buildPartition() {
-    return Container(
-      height: 150,
-      decoration: BoxDecoration(
-          image: DecorationImage(image: AssetImage("images/partitions.png"))),
+  buildAreaCard(AreaCard areaCard) {
+    return Column(
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+          child: GridView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 5,
+                childAspectRatio: 0.7,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 5),
+            itemCount: areaCard.list.length,
+            itemBuilder: (context, i) {
+              return Container(
+                  child: Tab(
+                icon: Image.network(
+                  areaCard.list[i].cover,
+                  fit: BoxFit.fitWidth,
+                ),
+                child: Text(
+                  areaCard.list[i].title,
+                  style: TextStyle(fontSize: 12),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ));
+            },
+          ),
+        ),
+        DrawLine.GreyLine(),
+      ],
     );
   }
 
@@ -115,9 +151,9 @@ class _LiveListViewPageState extends State<LiveListViewPage>
             physics: new NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 mainAxisSpacing: 5.0,
-                crossAxisSpacing: 7.0,
+                crossAxisSpacing: 5.0,
                 crossAxisCount: 2,
-                childAspectRatio: 0.8),
+                childAspectRatio: 1.1),
             itemCount: partition.lives.length,
             itemBuilder: (BuildContext contex, int i) {
               return buildCard(partition.lives[i]);
@@ -130,94 +166,122 @@ class _LiveListViewPageState extends State<LiveListViewPage>
   }
 
   buildCard(LiveItem carditem) {
-    return Container(
-      padding: EdgeInsets.only(top: 10, bottom: 10),
-      //height: 120,
-      child: new Column(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Expanded(
-            flex: 6,
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: NetworkImage(carditem.user_cover + "@320w_200h"),
-                    fit: BoxFit.cover),
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-              ),
-              alignment: Alignment.topRight,
-              child: Container(
-                padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                decoration: BoxDecoration(
-                  color: Colors.red[400],
-                  borderRadius: BorderRadius.only(topRight: Radius.circular(5)),
-                ),
-                child: Text(
-                  "热度 " + carditem.online.toString(),
-                  style: TextStyle(color: Colors.white, fontSize: 12),
-                ),
-              ),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LivePlayPage(
+              carditem.roomid.toString(),
+              cover: carditem.face,
+              userName: carditem.uname,
             ),
           ),
-          Expanded(
-            flex: 3,
-            child: Row(
-              children: <Widget>[
-                Container(
-                  //头像
-                  height: 39,
-                  width: 39,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(image: NetworkImage(carditem.face + "@100w_100h")),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                SizedBox(
-                  width: 7,
-                ),
-                Expanded(
-                  child: Text(
-                    carditem.uname,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 13),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.only(top: 5, left: 5, right: 5),
-            child: Text(
-              carditem.title,
-              style: TextStyle(color: Colors.black, fontSize: 14),
-              maxLines: 1,
-            ),
-          ),
-          Expanded(
-              flex: 2,
-              child: Padding(
-                padding: EdgeInsets.only(top: 5, left: 5, right: 5, bottom: 5),
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      "${carditem.area_name}",
-                      style: TextStyle(color: Colors.grey, fontSize: 13),
-                    ),
-                    Expanded(
-                      child: Align(
-                        alignment: FractionalOffset.centerRight,
-                        child: Icon(
-                          Icons.more_vert,
-                          size: 13,
-                          color: Colors.grey,
-                        ),
+        );
+      },
+      child: Container(
+        child: new Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+              flex: 4,
+              child: ClipRRect(
+                  borderRadius: BorderRadius.circular(3),
+                  child: Stack(
+                    children: <Widget>[
+                      Container(
+                        width: double.infinity,
+                        height: double.infinity,
+                        child: Image.network(carditem.user_cover+"@320w_200h",fit: BoxFit.cover,),
                       ),
-                    )
-                  ],
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(5, 10, 5, 5),
+                          decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                Color.fromRGBO(0, 0, 0, 0),
+                                Colors.black45
+                              ])),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Expanded(
+                                child: Text(
+                                  carditem.uname,
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 12),
+                                  maxLines: 1,
+                                ),
+                              ),
+                              Icon(
+                                BIcon.live_people,
+                                size: 18,
+                                color: Colors.white,
+                              ),
+                              Text(
+                                MyMath.intToString(carditem.online),
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 12),
+                                maxLines: 1,
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  )),
+            ),
+            Expanded(
+              flex: 1,
+              child:  Container(
+                padding: EdgeInsets.only(top: 5, left: 5, right: 5),
+                child: Text(
+                  carditem.title,
+                  style: TextStyle(color: Colors.black, fontSize: 14),
+                  maxLines: 1,
                 ),
-              ))
-        ],
+              ),
+            ),
+            Expanded(
+                flex: 1,
+                child: Padding(
+                  padding:
+                      EdgeInsets.only(top: 5, left: 5, right: 5, bottom: 5),
+                  child: Text(
+                    "${carditem.area_name}",
+                    style: TextStyle(color: Colors.grey, fontSize: 13),
+                    maxLines: 1,
+                  ),
+                ))
+          ],
+        ),
+      ),
+    );
+  }
+
+  buildBanners(Banners banners) {
+    return Container(
+      height: 100,
+      margin: EdgeInsets.all(10),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(5),
+        child: Swiper(
+          itemCount: banners.list.length,
+          itemBuilder: (context, i) {
+            return Container(
+              child: Image.network(
+                banners.list[i].pic,
+                fit: BoxFit.fitWidth,
+              ),
+            );
+          },
+        ),
       ),
     );
   }

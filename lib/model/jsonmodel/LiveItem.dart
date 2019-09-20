@@ -1,18 +1,27 @@
 import 'package:flutter_MyBilibili/tools/MyMath.dart';
 
-class Banner{
+class BannerItem{
   String pic;
-  int id;
-  int postition;
+  String id;
+  String postition;
   String title;
   String link;
-  Banner({this.id,this.link,this.pic,this.postition,this.title});
-  Banner.fromJson(Map<String ,dynamic> jsondata){
+  BannerItem({this.id,this.link,this.pic,this.postition,this.title});
+  BannerItem.fromJson(Map<String ,dynamic> jsondata){
     pic=jsondata["pic"];
     id=jsondata["id"];
     postition=jsondata["postition"];
     title=jsondata["title"];
     link=jsondata["link"];
+  }
+}
+class Banners{
+  List<BannerItem> list;
+  Banners.fromJson(Map<String,dynamic> jd){
+    list=List<BannerItem>();
+    for(Map<String,dynamic> item in jd["banner"]){
+      list.add(BannerItem.fromJson(item));
+    }
   }
 }
 class LivePartition{
@@ -55,4 +64,13 @@ class LiveItem{
     online=jsondata["online"];
     id=MyMath.getrandomhash();
   }
+}
+class AreaCard{
+  List<AreaItem> list;
+  AreaCard(this.list);
+}
+class AreaItem{
+  String cover;
+  String title;
+  AreaItem(this.cover,this.title);
 }

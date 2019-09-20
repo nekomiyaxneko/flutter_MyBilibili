@@ -66,7 +66,6 @@ flutter:
     - images/ic_player_danmaku_input_options_rl_disabled.png
     - images/ic_player_coin.png
     - images/timg.gif
-    - images/butterfly.mp4
     - images/partitions.png
     - images/img_tips_error_load_error.png
     - images/bili_default_avatar.png
@@ -77,10 +76,12 @@ flutter:
     - images/ic_tv_play.png
     - images/ic_tv_play_large.png
     - images/小电视.png
-    - images/bilibili_no_network.jpg
-    - images/bilibili_loading.jpg
+    - images/ic_loading_error.png
+    - images/ic_loading.png
     - assets/html/bilibili.html
     - assets/html/hello.html
+    - images/live_background.png
+    - images/me_tv_sign_out.png
   #  - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

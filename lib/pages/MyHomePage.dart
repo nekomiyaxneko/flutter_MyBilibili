@@ -85,6 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     decoration: BoxDecoration(
                       color: Theme.of(context).primaryColor,
                       //TODO:添加背景图片
+                      image: DecorationImage(image: AssetImage("images/me_tv_sign_out.png",),fit: BoxFit.contain,alignment: Alignment.bottomRight),
                     ),
                     accountName: new Text(
                       "未登陆",

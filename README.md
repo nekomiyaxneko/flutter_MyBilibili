@@ -1,6 +1,8 @@
 # flutter_MyBilibili
 
-flutter bilibili 学习 高仿 播放
+bilibili by flutter
+
+这是一个高仿bilibili的flutter练习app
 
 # 已经实现的功能
 * 首页
@@ -9,7 +11,7 @@ flutter bilibili 学习 高仿 播放
 	* 追番页面
 	* 影视页面
 	* 70周年页面
-	* 直播-下拉刷新
+	* 直播-下拉刷新-**可以看直播啦**
 * 搜索
 	* 支持关键字和av号搜索
 	* 热搜推荐和搜索记录
@@ -38,6 +40,7 @@ flutter bilibili 学习 高仿 播放
 | :---------------------------- | :----------------------- |
 |     启动页       | ![splash](screenshot/splash.png) |
 |       推荐/直播     | ![home](screenshot/home.png) ![live](screenshot/live.png) |
+|       直播播放页面     | ![home](screenshot/home_live_1.png) ![live](screenshot/home_live_2.png) |
 |       热门列表     | ![home](screenshot/home_hot_1.png) ![live](screenshot/home_hot_2.png) |
 |       追番列表     | ![home](screenshot/home_bangumi_1.png) ![live](screenshot/home_bangumi_2.png) |
 |       影视列表     | ![home](screenshot/home_cinema_1.png) ![live](screenshot/home_cinema_2.png) |
@@ -62,11 +65,11 @@ flutter bilibili 学习 高仿 播放
 - [x] 搜索
 	- [x] 搜索记录
 	- [x] 热门推荐
-- [ ] 番剧列表
-- [ ] 影视列表
-- [ ] 70周年列表
-- [ ] 热门动态
-- [ ] up主信息
+- [x] 番剧列表
+- [x] 影视列表
+- [x] 70周年列表
+- [x] 热门动态
+- [x] up主信息
 - [x] 附加功能
 	- [x] 封面保存
 

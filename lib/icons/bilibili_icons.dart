@@ -49,6 +49,8 @@ class BIcon {
   static const full_screen=const _BIcon(0xe678);
   //更多
   static const more=const _BIcon(0xe693);
+  //观看数量
+  static const live_people=const _BIcon(0xe66c);
 
 }
 
