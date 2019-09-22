@@ -229,9 +229,15 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
       context: context,
       builder: (context) => AlertDialog(
         contentPadding: EdgeInsets.all(15),
-        content: Text(
-          '是否保存封面?',
-          textAlign: TextAlign.center,
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+              Text(
+              '是否保存封面?',
+              textAlign: TextAlign.center,
+            ),
+            Image.network(videoItemFromJson.pic+"@320w_200h"),
+          ],
         ),
         actions: <Widget>[
           FlatButton(

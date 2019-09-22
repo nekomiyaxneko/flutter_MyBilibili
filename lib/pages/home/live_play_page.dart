@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_MyBilibili/tools/MyMath.dart';
 import 'package:flutter_MyBilibili/util/BilibiliAPI/live_api.dart';
 import 'package:flutter_MyBilibili/views/my_chewie_custom.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:video_player/video_player.dart';
 
 class LivePlayPage extends StatefulWidget {
@@ -196,6 +197,9 @@ class _LivePlayPageState extends State<LivePlayPage> {
               )
             ],
           ),
+        ),
+        HtmlWidget(
+          _info.description
         ),
       ],
     ));

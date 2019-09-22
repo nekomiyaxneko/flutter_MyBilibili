@@ -103,7 +103,6 @@ class LiveApi {
           sendTimeout: 5000,
         ),
       );
-      print(res.data);
       if(res.data["code"]==0){
         return LiveInfo.fromJson(res.data["data"]);
       }

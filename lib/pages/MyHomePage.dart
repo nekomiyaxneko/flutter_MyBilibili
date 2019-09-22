@@ -7,7 +7,7 @@ import 'package:flutter_MyBilibili/MyAppBar/MallAppBar.dart';
 import 'package:flutter_MyBilibili/icons/bilibili_icons.dart';
 import 'package:flutter_MyBilibili/pages/channel/ChannelPage.dart';
 import 'package:flutter_MyBilibili/pages/dynamic/DynamicPage.dart';
-import 'package:flutter_MyBilibili/pages/home/HomeTabBar.dart';
+import 'package:flutter_MyBilibili/pages/home/home_page.dart';
 import 'package:flutter_MyBilibili/pages/me/LoginPage.dart';
 import 'package:flutter_MyBilibili/pages/mall/MallPage.dart';
 import 'package:flutter_MyBilibili/pages/me/setting_main.dart';
@@ -31,7 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
     MallAppBar() //第四页
   ];
   final _widgetOptionsItem = [
-    HomeTabBar(),
+    HomePage(),
     ChannelPage(),
     DynamicPage(),
     MallPage()
@@ -85,7 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     decoration: BoxDecoration(
                       color: Theme.of(context).primaryColor,
                       //TODO:添加背景图片
-                      image: DecorationImage(image: AssetImage("images/me_tv_sign_out.png",),fit: BoxFit.contain,alignment: Alignment.bottomRight),
+                      image: DecorationImage(image:  AssetImage("images/me_tv_sign_out.png",),fit: BoxFit.contain,alignment: Alignment.bottomRight),
                     ),
                     accountName: new Text(
                       "未登陆",
