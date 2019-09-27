@@ -20,7 +20,7 @@ class _AboutDeveloperState extends State<AboutDeveloper> {
             child: Image.asset("images/head_icon.jpg"),
           ),
           Center(
-            child: Text("nekomiyaxneko"),
+            child: Text("LLLinux"),
           ),
         ],
       ),

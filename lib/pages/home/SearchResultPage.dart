@@ -15,13 +15,13 @@ class _SearchResultPageState extends State<SearchResultPage> {
   //TextEditingController keywordcontroller;//搜索栏控制
   String keyword; //初始关键字
   List<VideoItem> videoresullist = []; //视频结果集合
-  LoadController _loadController=LoadController();
-  String _searchOrder="default";
-  Map<String,String> _searchOrderList={
-    "default":"默认排序",
-    "view":"播放多",
-    "danmaku":"弹幕多",
-    "pubdate":"新发布",
+  SearchController _searchController = SearchController();
+  String _searchOrder = "default";
+  Map<String, String> _searchOrderList = {
+    "default": "默认排序",
+    "view": "播放多",
+    "danmaku": "弹幕多",
+    "pubdate": "新发布",
   };
   int pn = 1;
   @override
@@ -31,11 +31,10 @@ class _SearchResultPageState extends State<SearchResultPage> {
     getSearchResult();
   }
 
-
   void getMoreResult() async {
     pn++;
-    videoresullist
-        .addAll(await GetUtilBilibili.getSearchByKeyword(keyword, pn,order: _searchOrder));
+    videoresullist.addAll(await GetUtilBilibili.getSearchByKeyword(keyword, pn,
+        order: _searchOrder));
     if (this.mounted) {
       setState(() {});
     }
@@ -45,22 +44,20 @@ class _SearchResultPageState extends State<SearchResultPage> {
     setState(() {
       videoresullist.clear();
       pn = 1;
-      _loadController.status=LoadController.loading;
+      _searchController.status = SearchController.loading;
     });
-    videoresullist
-        .addAll(await GetUtilBilibili.getSearchByKeyword(keyword, pn,order: _searchOrder));
+    videoresullist.addAll(await GetUtilBilibili.getSearchByKeyword(keyword, pn,
+        order: _searchOrder));
     print("getresult end");
     if (videoresullist.length > 0) {
-      _loadController.status=LoadController.success;
-      } else {
-      _loadController.status=LoadController.error;
-      }
-    if (this.mounted) {
-      setState(() {
-        
-      });
+      _searchController.status = SearchController.success;
+    } else {
+      _searchController.status = SearchController.error;
     }
-    print("status${_loadController.status}");
+    if (this.mounted) {
+      setState(() {});
+    }
+    print("status${_searchController.status}");
   }
 
   @override
@@ -134,7 +131,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
 
   buildSearchResult() {
     //如果加载动作完毕
-    if (_loadController.status==LoadController.error) {
+    if (_searchController.status == SearchController.error) {
       //加载失败了
       return Center(
         child: Column(
@@ -151,7 +148,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
           ],
         ),
       );
-    } else if (_loadController.status==LoadController.loading) {
+    } else if (_searchController.status == SearchController.loading) {
       return buildWaitpage();
     } else {
       return Column(
@@ -228,7 +225,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                           borderRadius: BorderRadius.all(Radius.circular(2)),
                           image: DecorationImage(
                               image: NetworkImage(
-                                item.cover+"@100w_100h",
+                                item.cover + "@320w_320h",
                               ), //封面
                               fit: BoxFit.cover)),
                       child: Container(
@@ -254,26 +251,29 @@ class _SearchResultPageState extends State<SearchResultPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.max,
+                      mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Text(
-                          item.title,
-                          style: TextStyle(fontSize: 14),
-                          maxLines: 2,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          item.author,
-                          textAlign: TextAlign.start,
-                          maxLines: 1,
-                        ),
-                        Text(
-                          "播放 ${item.view} 弹幕 ${item.danmu}",
-                          textAlign: TextAlign.start,
-                          maxLines: 1,
-                        ),
+                            item.title,
+                            style: TextStyle(fontSize: 14,),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                              Text(
+                                item.author,
+                                textAlign: TextAlign.start,
+                                maxLines: 1,
+                              ),
+                              Text(
+                                "播放 ${item.view} 弹幕 ${item.danmu}",
+                                textAlign: TextAlign.start,
+                                maxLines: 1,
+                              ),
+                          
+                        
                       ],
                     ),
                   ),
@@ -287,7 +287,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
     );
   }
 
-  selectSearchOrder(){
+  selectSearchOrder() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -295,18 +295,18 @@ class _SearchResultPageState extends State<SearchResultPage> {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children:_searchOrderList.keys.map((key){
-          return FlatButton(
-            child: Text(_searchOrderList[key]),
-            onPressed: (){
-              setState(() {
-              _searchOrder=key;
-              });
-              getSearchResult();
-              Navigator.pop(context);
-            },
-          );
-        }).toList(),
+          children: _searchOrderList.keys.map((key) {
+            return FlatButton(
+              child: Text(_searchOrderList[key]),
+              onPressed: () {
+                setState(() {
+                  _searchOrder = key;
+                });
+                getSearchResult();
+                Navigator.pop(context);
+              },
+            );
+          }).toList(),
         ),
         // actions: _searchOrderList.keys.map((key){
         //   return FlatButton(
@@ -324,10 +324,12 @@ class _SearchResultPageState extends State<SearchResultPage> {
   }
 }
 
-class LoadController{
-  static int error=-1;
-  static int success=0;
-  static int loading=1;
-  int status=loading;
-  LoadController();
+class SearchController {
+  static int error = -1;
+  static int success = 0;
+  static int loading = 1;
+  static int video = 0;
+  static int live = 4;
+  int status = loading;
+  SearchController();
 }

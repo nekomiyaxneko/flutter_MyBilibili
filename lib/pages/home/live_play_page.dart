@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_MyBilibili/tools/MyMath.dart';
@@ -20,7 +21,6 @@ class _LivePlayPageState extends State<LivePlayPage> {
   ChewieController _chewieController;
   List<String> _urlList = [];
   LiveInfo _info;
-  bool _isPortrait;
   int index = 0;
   @override
   void initState() {
@@ -111,7 +111,7 @@ class _LivePlayPageState extends State<LivePlayPage> {
       appBar: PreferredSize(
         preferredSize: _info.isPortrait
             ? Size.fromHeight(MediaQuery.of(context).size.height)
-            : Size.fromHeight(MediaQuery.of(context).size.width * 8 / 16),
+            : Size.fromHeight(MediaQuery.of(context).size.width * 9 / 16-MediaQueryData.fromWindow(window).padding.top),
         child: AppBar(
           elevation: 0,
           backgroundColor: Colors.black,

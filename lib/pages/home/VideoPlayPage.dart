@@ -1,16 +1,15 @@
 import 'dart:typed_data';
+import 'dart:ui';
 import 'package:chewie/chewie.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_MyBilibili/icons/bilibili_icons.dart';
-import 'package:flutter_MyBilibili/model/VideoItem.dart';
 import 'package:flutter_MyBilibili/model/VideoItemFromJson.dart';
 import 'package:flutter_MyBilibili/pages/home/ReviewsPage.dart';
 import 'package:flutter_MyBilibili/pages/home/video_detail_page.dart';
 import 'package:flutter_MyBilibili/util/GetUtilBilibili.dart';
 import 'package:flutter_MyBilibili/util/video_api.dart';
 import 'package:flutter_MyBilibili/views/my_chewie_custom.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -98,6 +97,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
                 child: Text("正在缓冲",style: TextStyle(color: Colors.white30),),
               ),
               autoPlay: true,
+              aspectRatio: _videoController.value.size.aspectRatio,
               allowedScreenSleep: false,
               customControls: MyChewieMaterialControls()
             );
@@ -116,25 +116,14 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
       });
   }
 
-  // _loadHtmlFromAssets() async {
-  //   String fileText = await rootBundle.loadString('assets/html/hello.html');
-  //   flutterWebviewPlugin.reloadUrl( Uri.dataFromString(
-  //       fileText,
-  //       mimeType: 'text/html',
-  //       encoding: Encoding.getByName('utf-8')
-  //   ).toString(),
-  //   headers: {"Cookie":"buvid3=5410244B-513B-4AB8-98AC-0B6F466E36A3190966infoc"},
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
-    print("replaycount "+replayCount.toString());
     return Scaffold(
       key: _videoplayscaffoldkey,
       appBar: PreferredSize(
         preferredSize:
-            Size.fromHeight(MediaQuery.of(context).size.width * 10 / 16),
+            Size.fromHeight(MediaQuery.of(context).size.width * 9.0 / 16.0-MediaQueryData.fromWindow(window).padding.top+30),
         child: AppBar(
           elevation: 1,
           centerTitle: true,
@@ -146,7 +135,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
                   : _chewieController.play();
             },
             child: Container(
-              margin: EdgeInsets.only(bottom: 44),
+              margin: EdgeInsets.only(bottom: 30),
               color: Colors.black,
               width: double.infinity,
               child: _chewieController != null
@@ -178,12 +167,18 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
                       unselectedLabelColor: Colors.grey,
                       indicatorColor: Colors.pinkAccent,
                       tabs: <Widget>[
-                        Tab(
-                          text: "简介",
+                        Container(
+                          height: 30,
+                          child: Tab(
+                            text: "简介",
+                          ),
                         ),
-                        Tab(
-                          text:replayCount==0?"评论":"评论 ${replayCount.toString()}",
-                        )
+                        Container(
+                          height: 30,
+                          child: Tab(
+                            text:replayCount==0?"评论":"评论 ${replayCount.toString()}",
+                          )
+                        ),
                       ],
                     ),
                   ),
@@ -276,14 +271,6 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
   }
 }
 
-openUrl(String url) async {
-  if (await canLaunch(url)) {
-    await launch(url);
-  } else {
-    throw "no";
-  }
-}
-
 class GetPreferredSizeWidget extends StatelessWidget
     implements PreferredSizeWidget {
   final Widget child;
@@ -300,7 +287,6 @@ class GetPreferredSizeWidget extends StatelessWidget
   }) : super(key: key);
 
   @override
-  // TODO: implement preferredSize
   Size get preferredSize => getSize();
 
   Size getSize() {

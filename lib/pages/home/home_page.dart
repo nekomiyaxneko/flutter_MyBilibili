@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '70th_anniversary_page.dart';
 import 'live_list_page.dart';
-import 'RecommendPage.dart';
+import 'recommend_list_page.dart';
 import 'bangumi_list_page.dart';
 import 'cinema_list_page.dart';
 import 'hot_list_page.dart';

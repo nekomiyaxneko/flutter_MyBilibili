@@ -205,7 +205,7 @@ class _HotListPageState extends State<HotListPage>
     if (hotres != null && topres != null) {
       _refreshController.refreshCompleted();
     } else {
-      _refreshController.loadFailed();
+      _refreshController.refreshFailed();
     }
     if (mounted)
       setState(() {
@@ -240,7 +240,7 @@ class HotVideoView extends StatelessWidget {
         );
       },
       child: Container(
-        height: 120,
+        //height: 120,
         child: Column(
           children: <Widget>[
             Padding(

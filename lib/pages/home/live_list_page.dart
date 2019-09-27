@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_MyBilibili/icons/bilibili_icons.dart';
 import "package:flutter_MyBilibili/model/jsonmodel/LiveItem.dart";
 import 'package:flutter_MyBilibili/pages/home/live_play_page.dart';
+import 'package:flutter_MyBilibili/pages/me/LoginPage.dart';
 import 'package:flutter_MyBilibili/tools/MyMath.dart';
 import 'package:flutter_MyBilibili/util/BilibiliAPI/live_api.dart';
 import 'package:flutter_MyBilibili/tools/LineTools.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class LiveListViewPage extends StatefulWidget {
   @override
@@ -17,29 +19,24 @@ class _LiveListViewPageState extends State<LiveListViewPage>
   final List _list = [];
   ScrollController _listviewscrollController =
       ScrollController(); //listview的控制器
-  ScrollController _gridviewscrollController =
-      ScrollController(); //gridview的控制器
-  bool isaddok = false;
+  RefreshController _refreshController=RefreshController(initialRefresh: true);
+  @override
+  void dispose() {
+    super.dispose();
+    _refreshController.dispose();
+  }
   @override
   void initState() {
     super.initState();
-    addCard();
   }
-
-  addCard() async {
-    _list.addAll(await LiveApi.getLiveList());
-    if (_list.length != 0) {
-      isaddok = true;
-    }
-    if (this.mounted) {
-      setState(() {});
-    }
-  }
-
+  
+  
+ 
   Future<void> _onRefresh() async {
     _list.clear();
     _list.addAll(await LiveApi.getLiveList());
     if (this.mounted) {
+      _refreshController.refreshCompleted();
       setState(() {});
     }
   }
@@ -51,7 +48,8 @@ class _LiveListViewPageState extends State<LiveListViewPage>
       floatingActionButton: FloatingActionButton(
         //直播按钮
         onPressed: () {
-          _onRefresh();
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => LoginPage()));
         },
         child: Padding(
           padding: EdgeInsets.all(5),
@@ -63,37 +61,35 @@ class _LiveListViewPageState extends State<LiveListViewPage>
         ),
         backgroundColor: Colors.pink[300],
       ),
-      body: buildLiveListView(),
+      body: SmartRefresher(
+        controller: _refreshController,
+        onRefresh: _onRefresh,
+        child: _refreshController.isRefresh == false
+            ? buildLiveListView()
+            : Center(
+                child: CircularProgressIndicator(),
+              ),
+      ),
     );
   }
 
   Widget buildLiveListView() {
-    if (isaddok == true) {
-      //判断是否加载出来数据
-      return RefreshIndicator(
-        onRefresh: _onRefresh,
-        child: ListView.builder(
-          physics: AlwaysScrollableScrollPhysics(),
-          controller: _listviewscrollController,
-          itemCount: _list.length,
-          itemBuilder: (context, i) {
-            if (_list[i] is LivePartition) {
-              return buildLivePartition(_list[i]);
-            } else if (_list[i] is Banners) {
-              return buildBanners(_list[i]);
-            } else if (_list[i] is AreaCard) {
-              return buildAreaCard(_list[i]);
-            } else {
-              return Container();
-            }
-          },
-        ),
-      );
-    } else {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
+    return ListView.builder(
+      physics: AlwaysScrollableScrollPhysics(),
+      controller: _listviewscrollController,
+      itemCount: _list.length,
+      itemBuilder: (context, i) {
+        if (_list[i] is LivePartition) {
+          return buildLivePartition(_list[i]);
+        } else if (_list[i] is Banners) {
+          return buildBanners(_list[i]);
+        } else if (_list[i] is AreaCard) {
+          return buildAreaCard(_list[i]);
+        } else {
+          return Container();
+        }
+      },
+    );
   }
 
   buildAreaCard(AreaCard areaCard) {
@@ -146,7 +142,7 @@ class _LiveListViewPageState extends State<LiveListViewPage>
         Padding(
           padding: EdgeInsets.only(left: 7, right: 7),
           child: GridView.builder(
-            controller: _gridviewscrollController,
+            controller: ScrollController(),
             shrinkWrap: true,
             physics: new NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -192,7 +188,10 @@ class _LiveListViewPageState extends State<LiveListViewPage>
                       Container(
                         width: double.infinity,
                         height: double.infinity,
-                        child: Image.network(carditem.user_cover+"@320w_200h",fit: BoxFit.cover,),
+                        child: Image.network(
+                          carditem.user_cover + "@320w_200h",
+                          fit: BoxFit.cover,
+                        ),
                       ),
                       Positioned(
                         bottom: 0,
@@ -239,7 +238,7 @@ class _LiveListViewPageState extends State<LiveListViewPage>
             ),
             Expanded(
               flex: 1,
-              child:  Container(
+              child: Container(
                 padding: EdgeInsets.only(top: 5, left: 5, right: 5),
                 child: Text(
                   carditem.title,

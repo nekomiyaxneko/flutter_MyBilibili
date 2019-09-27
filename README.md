@@ -54,7 +54,7 @@ bilibili by flutter
 |      会员购      | ![play_detail](screenshot/mall.png) |
 
 
-# 获取方式
+# How to start
 
 ### 点击链接下载安装包
 [下载](release/app-release.apk)

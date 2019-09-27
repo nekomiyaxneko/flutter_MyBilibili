@@ -125,7 +125,7 @@ class _MyChewieMaterialControlsState extends State<MyChewieMaterialControls> {
             _buildPlayPause(controller),
             chewieController.isLive ? const SizedBox() : _buildProgressBar(),
             chewieController.isLive
-                ? Expanded(child: const Text('LIVE',style: TextStyle(color: Colors.white),))
+                ? Expanded(child: const Text('直播',style: TextStyle(color: Colors.white),))
                 : _buildPosition(iconColor),
             chewieController.allowFullScreen
                 ? _buildExpandButton()
