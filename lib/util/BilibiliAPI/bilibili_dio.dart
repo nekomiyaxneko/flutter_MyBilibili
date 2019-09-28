@@ -6,7 +6,6 @@ class BilibiliDio{
     try{
       Dio dio=Dio();
       Options options=Options(
-        connectTimeout: 5000,
         receiveTimeout: 5000,
         sendTimeout: 5000,);
       if(headers!=null) options.headers=headers;

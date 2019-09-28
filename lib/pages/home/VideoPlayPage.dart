@@ -56,10 +56,10 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
 
   @override
   void dispose() {
-    super.dispose();
     _tabController.dispose();
     if(_chewieController !=null) _chewieController.dispose();
     if(_videoController !=null) _videoController.dispose();
+    super.dispose();
   }
 
   void getDetail() async {
@@ -187,7 +187,9 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
                     child: Container(
                         margin: EdgeInsets.only(right: 40),
                         alignment: Alignment.centerRight,
-                        child: Container(
+                        child: AnimatedContainer(
+                          //TODO 弹幕开关
+                          duration: Duration(milliseconds: 500),
                           padding: EdgeInsets.only(left: 5, right: 5),
                           decoration: BoxDecoration(
                               color: Colors.grey[200],
@@ -277,7 +279,6 @@ class GetPreferredSizeWidget extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return child;
   }
 
