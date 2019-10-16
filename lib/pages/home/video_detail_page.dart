@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_MyBilibili/icons/bilibili_icons.dart';
-import 'package:flutter_MyBilibili/model/VideoItemFromJson.dart';
+import 'package:flutter_MyBilibili/model/video_detail_item.dart';
+import 'package:flutter_MyBilibili/tools/MyMath.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class VideoDetailPage extends StatefulWidget {
-  final VideoItemFromJson videoItemFromJson;
+  final VideoDetailItem videoDetailItem;
   final String aid;
-  VideoDetailPage(this.videoItemFromJson, this.aid);
+  VideoDetailPage(this.videoDetailItem, this.aid);
   @override
   _VideoDetailPageState createState() => _VideoDetailPageState();
 }
@@ -41,7 +42,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                 width: 35,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: NetworkImage(widget.videoItemFromJson.face)),
+                      image: NetworkImage(widget.videoDetailItem.data.owner.face)),
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
@@ -53,14 +54,14 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      widget.videoItemFromJson.author,
+                      widget.videoDetailItem.data.owner.name,
                       style: TextStyle(fontSize: 14),
                     ),
                     SizedBox(
                       height: 3,
                     ),
                     Text(
-                      "${widget.videoItemFromJson.credit}粉丝",
+                      "${MyMath.intToString(widget.videoDetailItem.data.ownerExt.fans)}粉丝",
                       style: TextStyle(color: Colors.grey, fontSize: 11),
                     ),
                   ],
@@ -85,7 +86,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
           ),
           Container(
             child: Text(
-              "${widget.videoItemFromJson.title}",
+              "${widget.videoDetailItem.data.title}",
               style: TextStyle(fontSize: 18),
               maxLines: 2,
             ),
@@ -96,11 +97,11 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
           Row(
             children: <Widget>[
               Text(
-                "播放 ${numberFomat(widget.videoItemFromJson.play)}",
+                "播放 ${numberFomat(widget.videoDetailItem.data.stat.view)}",
                 style: TextStyle(color: Colors.grey[600], fontSize: 12),
               ),
               Text(
-                "  弹幕 ${numberFomat(widget.videoItemFromJson.review)}",
+                "  弹幕 ${numberFomat(widget.videoDetailItem.data.stat.danmaku)}",
                 style: TextStyle(color: Colors.grey[600], fontSize: 12),
               ),
               GestureDetector(
@@ -119,7 +120,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
             height: 10,
           ),
           Text(
-            widget.videoItemFromJson.description,
+            widget.videoDetailItem.data.desc,
             style: TextStyle(color: Colors.grey),
           ),
           SizedBox(
@@ -180,7 +181,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                         color: Colors.grey[600],
                       ),
                       Text(
-                        "${widget.videoItemFromJson.coins.toString()}",
+                        "${widget.videoDetailItem.data.stat.coin}",
                         style: TextStyle(color: Colors.grey, fontSize: 10),
                       ),
                     ],
@@ -200,7 +201,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                         BIcon.collection,
                         color: Colors.grey[600],
                       ),
-                      Text("${widget.videoItemFromJson.favorites.toString()}",
+                      Text("${widget.videoDetailItem.data.stat.favorite}",
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 10,

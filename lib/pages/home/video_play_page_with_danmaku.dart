@@ -226,7 +226,8 @@ class _VideoPlayPageWithDanmakuState extends State<VideoPlayPageWithDanmaku> {
           ? TabBarView(
               controller: _tabController,
               children: <Widget>[
-                VideoDetailPage(videoItemFromJson, aid),
+                //VideoDetailPage(videoItemFromJson, aid),
+                Center(child: Text("详情"),),
                 ReviewsPage(
                   aid,
                   replayCount,

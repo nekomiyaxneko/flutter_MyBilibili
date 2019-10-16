@@ -4,7 +4,7 @@ import 'package:chewie/chewie.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_MyBilibili/icons/bilibili_icons.dart';
-import 'package:flutter_MyBilibili/model/VideoItemFromJson.dart';
+import 'package:flutter_MyBilibili/model/video_detail_item.dart';
 import 'package:flutter_MyBilibili/pages/home/ReviewsPage.dart';
 import 'package:flutter_MyBilibili/pages/home/video_detail_page.dart';
 import 'package:flutter_MyBilibili/util/GetUtilBilibili.dart';
@@ -26,7 +26,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
   var _videoplayscaffoldkey = new GlobalKey<ScaffoldState>(); //key的用法
   String aid;
   int replayCount=0;
-  VideoItemFromJson videoItemFromJson; //视频详细信息，介绍等
+  VideoDetailItem videoDetailItem;//视频详细信息，介绍等
   TabController _tabController =
       TabController(length: 2, vsync: AnimatedListState());
   VideoPlayerController _videoController;
@@ -63,11 +63,9 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
   }
 
   void getDetail() async {
-    videoItemFromJson =
-        await GetUtilBilibili.getVideoDetailByAid(aid);
-    if (videoItemFromJson != null) {
+    videoDetailItem =await VideoApi.getVideoDetail(aid);
+    if (videoDetailItem != null) {
       _getvideodetailisok = true;
-      print("getDetailok");
     }
     if (this.mounted) {
       setState(() {});
@@ -81,7 +79,6 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
 
   void setVideoUrl({int page}) async {
     var url = await VideoApi.getVideoPlayUrl(aid, page: page);
-    print("url: " + url);
     if (url == null) {
       Fluttertoast.showToast(msg: "获取视频播放地址失败");
       return;
@@ -210,7 +207,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
           ? TabBarView(
               controller: _tabController,
               children: <Widget>[
-                VideoDetailPage(videoItemFromJson, aid),
+                VideoDetailPage(videoDetailItem, aid),
                 ReviewsPage(
                   aid,
                   replayCount,
@@ -233,7 +230,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
               '是否保存封面?',
               textAlign: TextAlign.center,
             ),
-            Image.network(videoItemFromJson.pic+"@320w_200h"),
+            Image.network(videoDetailItem.data.pic+"@320w_200h"),
           ],
         ),
         actions: <Widget>[
@@ -247,7 +244,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
             child: Text("确定"),
             onPressed: () async {
               Navigator.pop(context);
-              await _saveCover(videoItemFromJson.pic);
+              await _saveCover(videoDetailItem.data.pic);
             },
           ),
         ],

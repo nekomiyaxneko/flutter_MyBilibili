@@ -58,7 +58,7 @@ packages:
     source: hosted
     version: "2.1.1"
   crypto:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: crypto
       url: "https://pub.flutter-io.cn"
@@ -387,6 +387,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.10.2+1"
+  web_socket_channel:
+    dependency: "direct main"
+    description:
+      name: web_socket_channel
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.15"
   webview_flutter:
     dependency: transitive
     description:

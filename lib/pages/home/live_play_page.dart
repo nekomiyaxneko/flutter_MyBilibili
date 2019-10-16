@@ -3,6 +3,7 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_MyBilibili/tools/MyMath.dart';
 import 'package:flutter_MyBilibili/util/BilibiliAPI/live_api.dart';
+import 'package:flutter_MyBilibili/views/live/live_danmaku_page.dart';
 import 'package:flutter_MyBilibili/views/my_chewie_custom.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:video_player/video_player.dart';
@@ -19,14 +20,16 @@ class LivePlayPage extends StatefulWidget {
 class _LivePlayPageState extends State<LivePlayPage> {
   VideoPlayerController _videoController;
   ChewieController _chewieController;
+  TabController _tabController;
   List<String> _urlList = [];
   LiveInfo _info;
   int index = 0;
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
+    _tabController=TabController(length: 2,vsync: AnimatedListState());
     _initLive();
+    super.initState();
   }
 
   _initLive() async {
@@ -136,8 +139,42 @@ class _LivePlayPageState extends State<LivePlayPage> {
     if (_info.isPortrait) {
       return Container();
     }
-    return Container(
-        child: ListView(
+    return Column(
+      children: <Widget>[
+        TabBar(
+          controller: _tabController,
+          indicatorSize: TabBarIndicatorSize.label,
+          indicatorColor: Theme.of(context).primaryColor,
+          labelColor: Theme.of(context).primaryColor,
+          tabs: <Widget>[
+            Container(
+              height: 35,
+              child: Tab(
+                text: "互动",
+              ),
+            ),
+            Container(
+              height: 35,
+              child: Tab(
+                text: "主播",
+              ),
+            ),
+          ],
+        ),
+        Expanded(
+          child: TabBarView(
+            controller: _tabController,
+            children: <Widget>[
+              buildLiveDanmakuList(),
+              buildLiverInfo(),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+  Widget buildLiverInfo(){
+    return ListView(
       shrinkWrap: true,
       physics: BouncingScrollPhysics(),
       children: <Widget>[
@@ -202,7 +239,11 @@ class _LivePlayPageState extends State<LivePlayPage> {
           _info.description
         ),
       ],
-    ));
+    );
+  }
+
+  Widget buildLiveDanmakuList(){
+    return LiveDanmakuPage(int.parse(widget.roomid));
   }
 }
 

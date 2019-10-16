@@ -1,17 +1,29 @@
-# flutter_MyBilibili
+# flutter_bilibili
+------------------
+# 简介
+---------------------------
+flutter练手项目 
+项目参考哔哩哔哩安卓客户端5.47版本的界面
 
-bilibili by flutter
+# 更新日志
+---------------------------  
+2019/10/16
+* 详情可以查看粉丝数
 
-这是一个高仿bilibili的flutter练习app
 
-# 已经实现的功能
+# 存在问题
+--------------------------
+2019/10/16 视频播放api无法使用
+
+# 功能
+----------------------------
 * 首页
 	* 推荐-下拉刷新，加载更多
 	* 热门top100下拉刷新，加载更多
 	* 追番页面
 	* 影视页面
 	* 70周年页面
-	* 直播-下拉刷新-**可以看直播啦**
+	* 直播推荐-下拉刷新-**可以看直播啦**
 * 搜索
 	* 支持关键字和av号搜索
 	* 热搜推荐和搜索记录
@@ -19,11 +31,12 @@ bilibili by flutter
 * 播放界面
 	* **可以播放视频了！**
 	* 可以看到视频信息和评论（评论暂时只做了前面的热评和一些最新的评论）
+	* 查看up粉丝数、视频播放量、弹幕数量、收藏等
 	* 点击右上角可以保存封面到相册
 * 频道
 	* 获取实时频道列表
 * 动态
-	* 显示未登录
+	* 动态界面
 * 会员购
 	* 显示活动和商品列表
 	* 下拉刷新，加载更多
@@ -32,44 +45,79 @@ bilibili by flutter
 	* 设置界面
 	* 简单登陆界面和彩蛋
 
+# 项目演示
+视频：[bilibili](https://www.bilibili.com/video/av68687797)
+
+# 界面截图
+-----------------------------
+| 截图                                                         |
+| :------------------------------------------------------------:|
+| 启动/home/频道/动态/会员购/侧滑菜单                          |
+| ![在这里插入图片描述](https://img-blog.csdnimg.cn/20190922192030995.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTM1MTgwNjQ=,size_16,color_FFFFFF,t_70) |
+| |
+| 视频播放/评论/直播播放|
+|![在这里插入图片描述](https://img-blog.csdnimg.cn/20190922192905429.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTM1MTgwNjQ=,size_16,color_FFFFFF,t_70)|
+| |
+|直播/热门/追番/影视|
+|![在这里插入图片描述](https://img-blog.csdnimg.cn/20190922193826741.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTM1MTgwNjQ=,size_16,color_FFFFFF,t_70)|
+|  |
+|影视/70周年|
+|![在这里插入图片描述](https://img-blog.csdnimg.cn/20190922194042262.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTM1MTgwNjQ=,size_16,color_FFFFFF,t_70)|
+|  |
+|搜索/登陆/保存封面|
+|![在这里插入图片描述](https://img-blog.csdnimg.cn/20190922194522476.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTM1MTgwNjQ=,size_16,color_FFFFFF,t_70)|
+
+# 项目地址
+-------------
+github:[https://github.com/nekomiyaxneko/flutter_MyBilibili](https://github.com/nekomiyaxneko/flutter_MyBilibili)  
+
+欢迎star
+
+# 上手指南
+--------------
+安卓虚拟机Nexus_5X_API_24、华为荣耀6、华为荣耀9上测试通过
+### 1.直接下载
+安卓:[下载apk安装包](https://raw.githubusercontent.com/nekomiyaxneko/flutter_MyBilibili/master/release/app-release.apk)
+IOS：由于没有ios开发设备，暂未提供
+
+### 2.clone本项目
+版本：
+```
+flutter: 1.9.1+hotfix.2-stable
+```
+1. clone本项目到本地 
+```bash
+git clone https://github.com/nekomiyaxneko/flutter_MyBilibili.git
+```
+2. 安装[flutter](https://flutter.dev/docs/get-started/install)
+3. 在项目根目录打开命令行输入
+```bash
+flutter packages get 
+flutter run --release
+```
+
+# 组件依赖
+  视频播放： `chewie video_player`
+  打开url：``url_launcher``
+  轮播图：`flutter_swiper`
+  下拉刷新上滑加载：`pull_to_refresh`
+  数据持久化：`shared_preferences`
+  保存图片：`image_gallery_saver`
+  发送请求：`dio`
+  权限检查与申请：`permission_handler`
+  提示框：`fluttertoast`
+  分享：`share`
+  加载html：`flutter_widget_from_html`
 
 
-# 界面
+# 鸣谢
+[《Flutter技术入门与实战》亢少军](https://blog.csdn.net/kangshaojun888)
+[BiliBili Android第三方](https://www.jianshu.com/p/5087346d8e93) 
+[Bilibili播放地址](https://blog.csdn.net/ucsheep/article/details/89394700)
+[flutter-go](https://github.com/alibaba/flutter-go)
 
-|              描述                        |       预览                  |
-| :---------------------------- | :----------------------- |
-|     启动页       | ![splash](screenshot/splash.png) |
-|       推荐/直播     | ![home](screenshot/home.png) ![live](screenshot/live.png) |
-|       直播播放页面     | ![home](screenshot/home_live_1.png) ![live](screenshot/home_live_2.png) |
-|       热门列表     | ![home](screenshot/home_hot_1.png) ![live](screenshot/home_hot_2.png) |
-|       追番列表     | ![home](screenshot/home_bangumi_1.png) ![live](screenshot/home_bangumi_2.png) |
-|       影视列表     | ![home](screenshot/home_cinema_1.png) ![live](screenshot/home_cinema_2.png) |
-|       70周年     | ![home](screenshot/home_70th_1.png) ![live](screenshot/home_70th_2.png) |
-|       播放/评论页面     | ![play2](screenshot/play_2.png) ![reply](screenshot/play_reply.png) |
-|     保存封面并查看    |![save_cover](screenshot/save_cover.png)![save_cover_ok](screenshot/save_cover_ok.png)|
-|     搜索推荐/搜索记录/结果     | ![search](screenshot/search_index.png)   ![search](screenshot/search_result_1.png) |
-|      搜索结果/筛选      |  ![search](screenshot/search_result_2.png) ![search_result](screenshot/search_result_3.png) |
-|  登陆/输入密码| ![login](screenshot/login.png) ![login_input_password](screenshot/login_input_password.png) |
-|      频道/动态      | ![dynamic](screenshot/channel.png) ![mall](screenshot/dynamic.png) |
-|      会员购      | ![play_detail](screenshot/mall.png) |
+# 维护
+本项目持续维护，欢迎各位提出建设性的建议。
 
-
-# How to start
-
-### 点击链接下载安装包
-[下载](release/app-release.apk)
-
-
-# TODO
-
-- [x] 搜索
-	- [x] 搜索记录
-	- [x] 热门推荐
-- [x] 番剧列表
-- [x] 影视列表
-- [x] 70周年列表
-- [x] 热门动态
-- [x] up主信息
-- [x] 附加功能
-	- [x] 封面保存
-
+# 版权声明
+[MIT License ](LICENSE)

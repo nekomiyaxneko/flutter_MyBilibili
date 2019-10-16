@@ -7,7 +7,6 @@ import 'package:flutter_MyBilibili/model/VideoItemFromJson.dart';
 import 'package:flutter_MyBilibili/model/jsonmodel/ChannelItem.dart';
 import 'package:flutter_MyBilibili/model/jsonmodel/GoodItem.dart';
 import 'package:flutter_MyBilibili/model/jsonmodel/ReviewList_model.dart';
-import 'package:flutter_MyBilibili/model/jsonmodel/hot_item.dart';
 import 'package:flutter_MyBilibili/model/jsonmodel/recommendlist_model.dart';
 import "package:flutter_MyBilibili/model/jsonmodel/LiveItem.dart";
 
@@ -38,11 +37,6 @@ class GetUtilBilibili {
       var result = await response.transform(utf8.decoder).join();
       Map<String, dynamic> jsondata = json.decode(result);
       VideoItemFromJson itemFromJson = VideoItemFromJson.fromJson(jsondata);
-      //print(jsondata["pic"]);
-      //print(itemFromJson.author);
-      //print(itemFromJson.list[0].page);
-      //print(itemFromJson.pages);
-      //print(itemFromJson.pic);
       httpClient.close();
       return itemFromJson;
     } catch (e) {
