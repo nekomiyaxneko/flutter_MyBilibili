@@ -6,7 +6,7 @@ flutter练手项目
 项目参考哔哩哔哩安卓客户端5.47版本的界面
 
 # 更新日志
----------------------------  
+---------------------------
 2019/10/16
 * 详情可以查看粉丝数
 
@@ -67,15 +67,11 @@ flutter练手项目
 |搜索/登陆/保存封面|
 |![在这里插入图片描述](https://img-blog.csdnimg.cn/20190922194522476.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTM1MTgwNjQ=,size_16,color_FFFFFF,t_70)|
 
-# 项目地址
--------------
-github:[https://github.com/nekomiyaxneko/flutter_MyBilibili](https://github.com/nekomiyaxneko/flutter_MyBilibili)  
 
-欢迎star
 
 # 上手指南
 --------------
-安卓虚拟机Nexus_5X_API_24、华为荣耀6、华为荣耀9上测试通过
+仅在安卓虚拟机Nexus_5X_API_24、华为荣耀6、华为荣耀9上测试通过
 ### 1.直接下载
 安卓:[下载apk安装包](https://raw.githubusercontent.com/nekomiyaxneko/flutter_MyBilibili/master/release/app-release.apk)
 IOS：由于没有ios开发设备，暂未提供
