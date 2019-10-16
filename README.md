@@ -93,23 +93,26 @@ flutter run --release
 ```
 
 # 组件依赖
-  视频播放： `chewie video_player`
-  打开url：``url_launcher``
-  轮播图：`flutter_swiper`
-  下拉刷新上滑加载：`pull_to_refresh`
-  数据持久化：`shared_preferences`
-  保存图片：`image_gallery_saver`
-  发送请求：`dio`
-  权限检查与申请：`permission_handler`
-  提示框：`fluttertoast`
-  分享：`share`
-  加载html：`flutter_widget_from_html`
+  视频播放： `chewie video_player`  
+  打开url：`url_launcher`  
+  轮播图：`flutter_swiper`  
+  下拉刷新上滑加载：`pull_to_refresh`  
+  数据持久化：`shared_preferences`  
+  保存图片：`image_gallery_saver`  
+  发送请求：`dio`  
+  权限检查与申请：`permission_handler`  
+  提示框：`fluttertoast`  
+  分享：`share`  
+  加载html：`flutter_widget_from_html`  
 
 
 # 鸣谢
-[《Flutter技术入门与实战》亢少军](https://blog.csdn.net/kangshaojun888)
+[《Flutter技术入门与实战》亢少军](https://blog.csdn.net/kangshaojun888)  
+
 [BiliBili Android第三方](https://www.jianshu.com/p/5087346d8e93) 
+
 [Bilibili播放地址](https://blog.csdn.net/ucsheep/article/details/89394700)
+
 [flutter-go](https://github.com/alibaba/flutter-go)
 
 # 维护
