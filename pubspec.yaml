@@ -30,7 +30,7 @@ dependencies:
   flutter_swiper: ^1.1.6
   pull_to_refresh: ^1.5.6
   shared_preferences: ^0.5.3+4
-  image_gallery_saver: ^1.2.1
+  image_gallery_saver: ^1.2.2
   dio: ^3.0.2
   permission_handler: ^3.2.2
   fluttertoast: ^3.1.3

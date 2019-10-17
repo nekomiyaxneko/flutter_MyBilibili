@@ -2,18 +2,24 @@
 ------------------
 # 简介
 ---------------------------
-flutter练手项目 
-项目参考哔哩哔哩安卓客户端5.47版本的界面
+flutter练习项目 
+参考哔哩哔哩安卓客户端5.47版本的界面
 
 # 更新日志
 ---------------------------
-2019/10/16
-* 详情可以查看粉丝数
+* 2019/10/16
+	详情可以查看粉丝数
+* 2019/10/17
+	修复视频无法播放
+	改善视频清晰度，目前最大支持720p。（以前是360p？不，感觉还要更低）
 
 
 # 存在问题
 --------------------------
-2019/10/16 视频播放api无法使用
+* 2019/10/16
+	视频播放api无法使用
+* 2019/10/17 
+	播放视频时如果调进度条会从头开始
 
 # 功能
 ----------------------------
@@ -109,14 +115,14 @@ flutter run --release
 # 鸣谢
 [《Flutter技术入门与实战》亢少军](https://blog.csdn.net/kangshaojun888)  
 
-[BiliBili Android第三方](https://www.jianshu.com/p/5087346d8e93) 
+[BiliBili Android第三方](https://www.jianshu.com/p/5087346d8e93)  
 
-[Bilibili播放地址](https://blog.csdn.net/ucsheep/article/details/89394700)
+[Bilibili播放地址](https://blog.csdn.net/ucsheep/article/details/89394700) 
 
-[flutter-go](https://github.com/alibaba/flutter-go)
+[flutter-go](https://github.com/alibaba/flutter-go) 
 
 # 维护
-本项目持续维护，欢迎各位提出建设性的建议。
+本项目不定期持续维护，欢迎各位提出建设性的建议。
 
 # 版权声明
 [MIT License ](LICENSE)

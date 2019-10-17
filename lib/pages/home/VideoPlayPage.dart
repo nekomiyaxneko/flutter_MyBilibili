@@ -7,7 +7,6 @@ import 'package:flutter_MyBilibili/icons/bilibili_icons.dart';
 import 'package:flutter_MyBilibili/model/video_detail_item.dart';
 import 'package:flutter_MyBilibili/pages/home/ReviewsPage.dart';
 import 'package:flutter_MyBilibili/pages/home/video_detail_page.dart';
-import 'package:flutter_MyBilibili/util/GetUtilBilibili.dart';
 import 'package:flutter_MyBilibili/util/video_api.dart';
 import 'package:flutter_MyBilibili/views/my_chewie_custom.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
@@ -26,31 +25,17 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
   var _videoplayscaffoldkey = new GlobalKey<ScaffoldState>(); //key的用法
   String aid;
   int replayCount=0;
+  int page=0;
+  int qn=64;
   VideoDetailItem videoDetailItem;//视频详细信息，介绍等
-  TabController _tabController =
-      TabController(length: 2, vsync: AnimatedListState());
+  TabController _tabController =TabController(length: 2, vsync: AnimatedListState());
   VideoPlayerController _videoController;
   ChewieController _chewieController;
   bool _getvideodetailisok = false;
   @override
   void initState() {
     aid=widget.aid;
-    //设置封面滚动监听，隐藏标题
-    // _nestedScrollViewController.addListener(() {
-    //   if (_nestedScrollViewController.offset > 110 && _isHideTitle == true) {
-    //     setState(() {
-    //       _isHideTitle = false;
-    //     });
-    //   } else if (_nestedScrollViewController.offset <= 110 &&
-    //       _isHideTitle == false) {
-    //     setState(() {
-    //       _isHideTitle = true;
-    //     });
-    //   }
-    // });
-    // _loadHtmlFromAssets();
-    getDetail();
-    setVideoUrl();
+    init();
     super.initState();
   }
 
@@ -62,7 +47,13 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
     super.dispose();
   }
 
-  void getDetail() async {
+  //初始化所有
+  init()async{
+    await getDetail();
+    setVideoUrl();
+  }
+
+  Future<void> getDetail() async {
     videoDetailItem =await VideoApi.getVideoDetail(aid);
     if (videoDetailItem != null) {
       _getvideodetailisok = true;
@@ -77,8 +68,11 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
     _videoplayscaffoldkey.currentState.showSnackBar(snackBar);
   }
 
-  void setVideoUrl({int page}) async {
-    var url = await VideoApi.getVideoPlayUrl(aid, page: page);
+  Future<void> setVideoUrl() async {
+    if(videoDetailItem==null){
+      return;
+    }
+    var url = await VideoApi.getVideoPlayUrlV2(videoDetailItem.data.pages[page].cid,qn: qn);
     if (url == null) {
       Fluttertoast.showToast(msg: "获取视频播放地址失败");
       return;
@@ -96,19 +90,31 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
               autoPlay: true,
               aspectRatio: _videoController.value.size.aspectRatio,
               allowedScreenSleep: false,
-              customControls: MyChewieMaterialControls()
+              customControls: MyChewieMaterialControls(),
             );
           });
         });
     }
   }
 
-  void setVideoUrlTemp() async {
+  Future<void> setVideoUrlTemp() async {
     _videoController = VideoPlayerController.network(
-      "http://upos-hz-mirrorakam.akamaized.net/upgcxcode/80/50/67185080/67185080-1-6.mp4?e=ig8euxZM2rNcNbRBhwdVhoM17WdVhwdEto8g5X10ugNcXBB_&deadline=1568605530&dynamic=1&gen=playurl&oi=1886944469&os=akam&platform=html5&rate=150000&trid=615451b499864313ab4585fee55a1490&uipk=5&uipv=5&um_deadline=1568605530&um_sign=be0bcb66049aa20c832c107e2637dc7f&upsig=691c2f0634c0abdca873aae2df85ff3e&uparams=e,deadline,dynamic,gen,oi,os,platform,rate,trid,uipk,uipv,um_deadline,um_sign&hdnts=exp=1568605530~hmac=b8aa313bbd254137d71781bcd853cd811708675de85a324b3bfca98a863963d2&mid=0",
+      "http://112.13.207.162/upgcxcode/99/26/122342699/122342699-1-64.flv?expires=1571295000&platform=android&ssig=pfP5TAFNXT-rc_XaV1S0Zw&oi=1972571493&trid=62e4ce8719924966859896e64564721d&nfb=maPYqpoel5MI3qOUX6YpRA==&nfc=1&mid=0",
     )..initialize().then((_) {
         if (this.mounted) {
-          setState(() {});
+          setState(() {
+            _chewieController = ChewieController(
+              videoPlayerController: _videoController,
+              placeholder: Center(
+                child: Text("正在缓冲",style: TextStyle(color: Colors.white30),),
+              ),
+              autoPlay: true,
+              aspectRatio: _videoController.value.size.aspectRatio,
+              allowedScreenSleep: false,
+              customControls: MyChewieMaterialControls(),
+              startAt: Duration(seconds: 5)
+            );
+          });
         }
       });
   }
@@ -214,8 +220,10 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
                 ),
               ],
             )
-          : Center(child: Text("正在加载")),
+          : Center(child: Text("正在加载"),
+          ),
     );
+    
   }
 
   _showCheckDialog() async {

@@ -30,7 +30,7 @@ class _DanmakuTileState extends State<DanmakuTile>
     double max = prefix0.max(
         window.physicalSize.width, window.physicalSize.height);
     animation =
-        Tween(end: max-widget.danmaku.msg.length.toDouble() * 12, begin: -widget.danmaku.msg.length.toDouble() * 12)
+        Tween(end: max-widget.danmaku.msg.length.toDouble() * 12, begin: -widget.danmaku.msg.length.toDouble() * 15)
             .animate(controller)
               ..addListener(
                 () {

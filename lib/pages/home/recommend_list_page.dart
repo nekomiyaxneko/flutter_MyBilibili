@@ -102,10 +102,10 @@ class _RecommendPageState extends State<RecommendPage>
 
   buildBanners() {
     return Container(
-        margin: EdgeInsets.all(10),
-        height: 180,
+        margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+        height: 160,
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(5),
           child: GestureDetector(
             onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>VideoPlayPageWithDanmaku("69024725"))),
             child: Container(
