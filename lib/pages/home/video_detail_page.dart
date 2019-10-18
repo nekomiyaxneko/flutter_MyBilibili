@@ -139,7 +139,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                         color: Colors.grey[600],
                       ),
                       Text(
-                        "喜欢",
+                        "${widget.videoDetailItem.data.stat.like}",
                         style: TextStyle(color: Colors.grey, fontSize: 10),
                       ),
                     ],
@@ -223,7 +223,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                         BIcon.share,
                         color: Colors.grey[600],
                       ),
-                      Text("分享",
+                      Text("${widget.videoDetailItem.data.stat.share}",
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 10,
