@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_MyBilibili/model/VideoItem.dart';
+import 'package:flutter_MyBilibili/pages/home/video_play_page_with_danmaku.dart';
 import 'package:flutter_MyBilibili/tools/LineTools.dart';
 import 'package:flutter_MyBilibili/util/GetUtilBilibili.dart';
-import 'package:flutter_MyBilibili/pages/home/VideoPlayPage.dart';
 
 class SearchResultPage extends StatefulWidget {
   SearchResultPage(this.keyword);
@@ -207,7 +207,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
           Navigator.push(
               context,
               new MaterialPageRoute(
-                  builder: (contex) => new VideoPlayPage(item.aid))); //打开视频
+                  builder: (contex) => new VideoPlayPageWithDanmaku(item.aid))); //打开视频
         },
         child: Column(
           children: <Widget>[
@@ -308,17 +308,6 @@ class _SearchResultPageState extends State<SearchResultPage> {
             );
           }).toList(),
         ),
-        // actions: _searchOrderList.keys.map((key){
-        //   return FlatButton(
-        //     child: Text(_searchOrderList[key]),
-        //     onPressed: (){
-        //       setState(() {
-        //       _searchOrder=key;
-        //       });
-        //       Navigator.pop(context);
-        //     },
-        //   );
-        // }).toList(),
       ),
     );
   }

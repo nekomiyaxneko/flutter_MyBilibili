@@ -13,19 +13,6 @@ import "package:flutter_MyBilibili/model/jsonmodel/LiveItem.dart";
 class GetUtilBilibili {
   static final String appkey = "c1b107428d337928";
   //appkey=1d8b6e7d45233436
-  static void getweatherData() async {
-    try {
-      HttpClient httpClient = new HttpClient();
-      HttpClientRequest request = await httpClient.getUrl(
-          Uri.parse("https://t.weather.sojson.com/api/weather/city/101030100"));
-      HttpClientResponse response = await request.close();
-      var result = await response.transform(utf8.decoder).join();
-      print(result);
-      httpClient.close();
-    } catch (e) {
-      print("请求失败");
-    } finally {}
-  }
 
   static getVideoDetailByAid(String aid) async {
     //51639674
@@ -135,7 +122,6 @@ class GetUtilBilibili {
       if (recommendVideoListModel.data != null) {
         for (var item in recommendVideoListModel.data) {
           if (item.goto == "av") {
-            print("aid:" + item.param);
             videolist.add(VideoItem(
               title: item.title,
               cover: item.cover,
@@ -198,9 +184,6 @@ class GetUtilBilibili {
       for (Map<String, dynamic> p in jsondata["data"]["partitions"]) {
         livelist.add(LivePartition.fromJson(p));
       }
-      print(livelist[0].lives[0].uname);
-      print(livelist[0].lives[0].roomid);
-      print("livelist get ok");
       httpClient.close();
       return livelist;
     } catch (e) {
@@ -227,7 +210,6 @@ class GetUtilBilibili {
           searchresultlist.add(VideoItem.fromSearchJson(item));
         }
       }
-      print(searchresultlist.toString());
       //print("resultlistlen"+searchresultlist.length.toString());
       //print("search get ok");
       httpClient.close();
@@ -280,7 +262,6 @@ class GetUtilBilibili {
       //print(jsondata);
       for (Map<String, dynamic> item in jsondata["data"]["vo"]["feeds"]
           ["list"]) {
-        //print(item);
         if (item["type"] == "ticketproject" || item["type"] == "mallitems") {
           goodllist.add(GoodItem.fromJson(item));
         }

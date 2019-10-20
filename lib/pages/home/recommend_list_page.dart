@@ -67,8 +67,9 @@ class _RecommendPageState extends State<RecommendPage>
           },
         ),
         child: ListView(
+          shrinkWrap: true,
           children: <Widget>[
-            buildBanners(),
+           // buildBanners(),
             GridView.builder(
               shrinkWrap: true,
               physics: BouncingScrollPhysics(),
@@ -88,7 +89,7 @@ class _RecommendPageState extends State<RecommendPage>
                         context,
                         new MaterialPageRoute(
                             builder: (contex) =>
-                                new VideoPlayPage(listData[index].aid)));
+                                new VideoPlayPageWithDanmaku(listData[index].aid)));
                   },
                   onLongPress: () {
                     openUrl(listData[index].cover);

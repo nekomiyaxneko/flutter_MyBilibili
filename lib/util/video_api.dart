@@ -37,7 +37,6 @@ class VideoApi{
       options: Options(
         responseType: ResponseType.json
       ));
-      print(res.data);
       if(res.data["durl"][0]["url"]!=null){
         return res.data["durl"][0]["url"];
       }

@@ -139,7 +139,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                         color: Colors.grey[600],
                       ),
                       Text(
-                        "${widget.videoDetailItem.data.stat.like}",
+                        "${MyMath.intToString(widget.videoDetailItem.data.stat.like)}",
                         style: TextStyle(color: Colors.grey, fontSize: 10),
                       ),
                     ],
@@ -181,7 +181,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                         color: Colors.grey[600],
                       ),
                       Text(
-                        "${widget.videoDetailItem.data.stat.coin}",
+                        "${MyMath.intToString(widget.videoDetailItem.data.stat.coin)}",
                         style: TextStyle(color: Colors.grey, fontSize: 10),
                       ),
                     ],
@@ -201,7 +201,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                         BIcon.collection,
                         color: Colors.grey[600],
                       ),
-                      Text("${widget.videoDetailItem.data.stat.favorite}",
+                      Text("${MyMath.intToString(widget.videoDetailItem.data.stat.favorite)}",
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 10,
@@ -223,7 +223,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                         BIcon.share,
                         color: Colors.grey[600],
                       ),
-                      Text("${widget.videoDetailItem.data.stat.share}",
+                      Text("${MyMath.intToString(widget.videoDetailItem.data.stat.share)}",
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 10,

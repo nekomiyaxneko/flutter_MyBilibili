@@ -24,6 +24,7 @@ class ChewieCustomWithDanmaku extends StatefulWidget {
 class _ChewieCustomWithDanmakuState extends State<ChewieCustomWithDanmaku> {
   VideoPlayerValue _latestValue;
   bool _hideStuff = true;
+  bool _hideDanmaku = false;
   Timer _hideTimer;
   Timer _initTimer;
   Timer _showAfterExpandCollapseTimer;
@@ -61,7 +62,10 @@ class _ChewieCustomWithDanmakuState extends State<ChewieCustomWithDanmaku> {
           onTap: () => _cancelAndRestartTimer(),
           child: Stack(
             children: <Widget>[
-              DanmakuView(widget.danmakuController),
+              Opacity(
+                opacity: _hideDanmaku ? 0 : 1,
+                child: DanmakuView(widget.danmakuController),
+              ),
               AbsorbPointer(
                 absorbing: _hideStuff,
                 child: Column(
@@ -134,10 +138,12 @@ class _ChewieCustomWithDanmakuState extends State<ChewieCustomWithDanmaku> {
             chewieController.isLive
                 ? Expanded(
                     child: const Text(
-                    '直播',
-                    style: TextStyle(color: Colors.white),
-                  ))
+                      '直播',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
                 : _buildPosition(iconColor),
+            chewieController.isLive ? Container() : _buildHideDanmakuButton(),
             chewieController.allowFullScreen
                 ? _buildExpandButton()
                 : Container(),
@@ -170,6 +176,19 @@ class _ChewieCustomWithDanmakuState extends State<ChewieCustomWithDanmaku> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildHideDanmakuButton() {
+    return Container(
+        child: GestureDetector(
+          child: Icon(_hideDanmaku ? BIcon.danmu_off : BIcon.danmu_on,color: Colors.white,),
+          onTap: () {
+            setState(() {
+              _hideDanmaku = !_hideDanmaku;
+            });
+          },
+        ),
     );
   }
 
@@ -378,9 +397,11 @@ class _ChewieCustomWithDanmakuState extends State<ChewieCustomWithDanmaku> {
       });
     });
   }
+
   //TODO 监听弹幕
   void _updateState() {
-    widget.danmakuController.setDuration(controller.value.position.inMilliseconds);
+    widget.danmakuController
+        .setDuration(controller.value.position.inMilliseconds);
     setState(() {
       _latestValue = controller.value;
     });

@@ -55,7 +55,8 @@ class _DanmakuTileState extends State<DanmakuTile>
     return Positioned(
       right: animation.value,
       top: widget.danmaku.pos * widget.wide,
-      child: Container(
+      child: Opacity(
+        opacity: controller.isCompleted?0:1,//完成的弹幕不显示
         child: Text(
           widget.danmaku.msg,
           style: TextStyle(
@@ -76,8 +77,8 @@ class _DanmakuTileState extends State<DanmakuTile>
         } else if (event.status == DanmakuStatus.play) {
           controller.forward();
         }
-      }
       setState(() {});
+      }
     });
   }
 }
