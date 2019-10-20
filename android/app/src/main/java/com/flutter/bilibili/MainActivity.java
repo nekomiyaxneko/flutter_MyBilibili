@@ -1,4 +1,4 @@
-package com.example.mytest;
+package com.flutter.bilibili;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
