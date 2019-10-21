@@ -20,7 +20,6 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
   @override
   void initState() {
     aid = widget.aid;
-    // TODO: implement initState
     super.initState();
   }
 
@@ -97,11 +96,11 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
           Row(
             children: <Widget>[
               Text(
-                "播放 ${numberFomat(widget.videoDetailItem.data.stat.view)}",
+                "播放 ${MyMath.intToString(widget.videoDetailItem.data.stat.view)}",
                 style: TextStyle(color: Colors.grey[600], fontSize: 12),
               ),
               Text(
-                "  弹幕 ${numberFomat(widget.videoDetailItem.data.stat.danmaku)}",
+                "  弹幕 ${MyMath.intToString(widget.videoDetailItem.data.stat.danmaku)}",
                 style: TextStyle(color: Colors.grey[600], fontSize: 12),
               ),
               GestureDetector(
@@ -243,13 +242,6 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
     );
   }
 
-  numberFomat(int n) {
-    if (n > 10000) {
-      return (n / 10000).toStringAsFixed(1)+"万";
-    } else {
-      return n.toString();
-    }
-  }
 
   openUrl(String url) async {
     if (await canLaunch(url)) {

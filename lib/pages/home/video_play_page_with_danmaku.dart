@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:chewie/chewie.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_MyBilibili/model/video_detail_item.dart';
 import 'package:flutter_MyBilibili/tools/MyMath.dart';
 import 'package:flutter_MyBilibili/views/danmaku/chewie_custom_with_danmaku.dart';
@@ -29,6 +30,7 @@ class VideoPlayPageWithDanmaku extends StatefulWidget {
 class _VideoPlayPageWithDanmakuState extends State<VideoPlayPageWithDanmaku> {
   var _videoplayscaffoldkey = new GlobalKey<ScaffoldState>(); //key的用法
   String aid;
+  String msg="正在初始化";
   int replayCount = 0;
   int page = 0;
   int qn = 64;
@@ -66,6 +68,9 @@ class _VideoPlayPageWithDanmakuState extends State<VideoPlayPageWithDanmaku> {
     if (videoDetailItem != null) {
       _getvideodetailisok = true;
     }
+    else{
+      Fluttertoast.showToast(msg: "获取视频信息失败");
+    }
     if (this.mounted) {
       setState(() {});
     }
@@ -91,6 +96,7 @@ class _VideoPlayPageWithDanmakuState extends State<VideoPlayPageWithDanmaku> {
       });
     }
     _danmakuController = DanmakuController(_preList);
+    setState(() {});
   }
 
   //显示提示
@@ -98,18 +104,28 @@ class _VideoPlayPageWithDanmakuState extends State<VideoPlayPageWithDanmaku> {
     var snackBar = SnackBar(content: Text(message));
     _videoplayscaffoldkey.currentState.showSnackBar(snackBar);
   }
-
+  //显示进度条下的提示
+  setMsg(String s){
+    setState(() {
+      msg=s;
+    });
+  }
   Future<void> initVideo() async {
     if (videoDetailItem == null) {
       return;
     }
+    setMsg("正在获取弹幕");
+    await getDanmaku();
+    setMsg("正在获取视频链接");
     var url = await VideoApi.getVideoPlayUrlV2(
         videoDetailItem.data.pages[page].cid,
         qn: qn);
     if (url == null) {
-      Fluttertoast.showToast(msg: "获取视频播放地址失败");
+      Fluttertoast.showToast(msg: "获取视频链接失败");
+      setMsg("获取视频链接失败");
       return;
     }
+    setMsg("正在缓冲视频");
     if (url is String) {
       _videoController = VideoPlayerController.network(
         url,
@@ -131,8 +147,6 @@ class _VideoPlayPageWithDanmakuState extends State<VideoPlayPageWithDanmaku> {
           });
         });
     }
-    await getDanmaku();
-    setState(() {});
   }
 
   // void setVideoUrlTemp() async {
@@ -168,7 +182,17 @@ class _VideoPlayPageWithDanmakuState extends State<VideoPlayPageWithDanmaku> {
                     controller: _chewieController,
                   )
                 : Center(
-                    child: CircularProgressIndicator(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        CircularProgressIndicator(),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(msg,style: prefix0.TextStyle(color: Colors.grey),)
+                      ],
+                    ),
                   ),
           ),
           actions: <Widget>[

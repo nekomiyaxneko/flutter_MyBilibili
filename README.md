@@ -22,6 +22,9 @@ flutter练习项目
 	~~视频播放api无法使用~~
 * 2019/10/17 
 	播放视频时如果调进度条会从头开始
+	原因是videoplayer底层使用的是exoplayer，这个播放器播放flv视频无法调进度条
+	[exoplayer支持的格式](https://exoplayer.dev/progressive.html)
+	[关于exoplayer不支持flv前进后退](https://github.com/google/ExoPlayer/issues/6190)
 
 # 功能
 ----------------------------

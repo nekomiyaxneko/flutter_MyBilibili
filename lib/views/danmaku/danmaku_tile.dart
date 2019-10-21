@@ -60,6 +60,7 @@ class _DanmakuTileState extends State<DanmakuTile>
         child: Text(
           widget.danmaku.msg,
           style: TextStyle(
+            backgroundColor: Colors.black12,
             color: Colors.white,
           ),
           maxLines: 1,

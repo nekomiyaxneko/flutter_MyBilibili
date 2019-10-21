@@ -158,7 +158,6 @@ class _LoginPageState extends State<LoginPage> {
           child: new CircularProgressIndicator(
             strokeWidth: 2.0,
             backgroundColor: Colors.blue,
-            // value: 0.2,
             valueColor: new AlwaysStoppedAnimation<Color>(Colors.pink[300]),
           ),
         ),
