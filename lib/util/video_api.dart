@@ -49,6 +49,34 @@ class VideoApi{
     }
   }
 
+  static getVideoPlayUrlV3(String aid,int cid,{int qn=32})async{
+    String appserct="aHRmhWMLkdeMuILqORnYZocwMBpMEOdt";
+    String path="https://app.bilibili.com/x/playurl";
+    int ts=DateTime.now().millisecondsSinceEpoch;
+    String data="actionkey=appkey&aid=$aid&appkey=iVGUTjsxvpLeuDCf&build=5490400&buvid=XZF9F55FE566C57599024A397F5F160E74DBE&cid=$cid&device=android&expire=0&fnval=16&fnver=0&force_host=0&fourk=0&from_spmid=tm.recommend.0.0&mid=0&mobi_app=android&otype=json&platform=android&qn=$qn&spmid=main.ugc-video-detail.0.0&ts=$ts";
+    String sign=md5.convert(utf8.encode(data+appserct)).toString();
+    String url="$path?$data&sign=$sign";
+    Dio dio=Dio();
+    try{
+      Response res=await dio.get(url,
+      options: Options(
+        responseType: ResponseType.json
+      ));
+      
+      if(res.data["code"]==0){
+        String vl=res.data["data"]["dash"]["video"][0]["base_url"];
+        String al=res.data["data"]["dash"]["audio"][0]["base_url"];
+        return {"video_url":vl,"audio_url":al};
+      }
+      return null;
+    }
+    catch(e){
+      print(e.toString());
+      print("获取视频播放地址失败");
+      return null;
+    }
+  }
+
   static getVideoDetail(String aid)async{
     String appserct="560c52ccd288fed045859ed18bffd973";
     String path="https://app.bilibili.com/x/v2/view";

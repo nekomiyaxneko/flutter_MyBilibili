@@ -6,6 +6,8 @@ import 'package:chewie/src/material_progress_bar.dart';
 import 'package:chewie/src/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_MyBilibili/icons/bilibili_icons.dart';
+import 'package:flutter_MyBilibili/tools/MyMath.dart';
+import 'package:flutter_MyBilibili/views/danmaku/bilibili_progress_bar.dart';
 import 'package:video_player/video_player.dart';
 
 import 'danmaku_controller.dart';
@@ -13,7 +15,8 @@ import 'danmaku_view.dart';
 
 class ChewieCustomWithDanmaku extends StatefulWidget {
   final DanmakuController danmakuController;
-  ChewieCustomWithDanmaku(this.danmakuController);
+  final VideoPlayerController audioController;
+  ChewieCustomWithDanmaku(this.danmakuController,{this.audioController});
 
   @override
   State<StatefulWidget> createState() {
@@ -370,21 +373,24 @@ class _ChewieCustomWithDanmakuState extends State<ChewieCustomWithDanmaku> {
       if (controller.value.isPlaying) {
         _hideStuff = false;
         _hideTimer?.cancel();
-        widget.danmakuController.pause();
         controller.pause();
+        widget.danmakuController.pause();
+        widget.audioController?.pause();
       } else {
         _cancelAndRestartTimer();
-
         if (!controller.value.initialized) {
           controller.initialize().then((_) {
             controller.play();
+            widget.audioController?.play();
           });
         } else {
           if (isFinished) {
             controller.seekTo(Duration(seconds: 0));
+            widget.audioController?.seekTo(Duration(seconds: 0));
           }
           controller.play();
           widget.danmakuController.play();
+          widget.audioController?.play();
         }
       }
     });
@@ -403,7 +409,11 @@ class _ChewieCustomWithDanmakuState extends State<ChewieCustomWithDanmaku> {
     widget.danmakuController
         .setDuration(controller.value.position.inMilliseconds);
     setState(() {
+      //同步音频视频
       _latestValue = controller.value;
+      if(widget.audioController!=null&&abs(widget.audioController.value.position.inMilliseconds-controller.value.position.inMilliseconds)>600){
+        widget.audioController.seekTo(controller.value.position);
+      }
     });
   }
 
@@ -411,18 +421,33 @@ class _ChewieCustomWithDanmakuState extends State<ChewieCustomWithDanmaku> {
     return Expanded(
       child: Padding(
         padding: EdgeInsets.only(right: 20.0),
-        child: MaterialVideoProgressBar(controller, onDragStart: () {
+        child: BilibiliVideoProgressBar(controller, 
+        audioController: widget.audioController,
+        onDragStart: () {
+            print("onDragStart :${controller.value.position.inMilliseconds}");
           setState(() {
             _dragging = true;
           });
 
           _hideTimer?.cancel();
-        }, onDragEnd: () {
+        }, 
+        onDragEnd: () {
+            print("onDragEnd :${controller.value.position.inMilliseconds}");
           setState(() {
             _dragging = false;
           });
 
           _startHideTimer();
+        },
+        onDragUpdate: (){
+            print("onDragUpdate :${controller.value.position.inMilliseconds}");
+
+        },
+        onSeekToRelativePosition: (p){
+          if(widget.audioController!=null){
+            //widget.audioController.seekTo(p);
+            print("onSeekToRelativePosition :${controller.value.position.inMilliseconds}");
+          }
         },
             colors: ChewieProgressColors(
               playedColor: Theme.of(context).primaryColor,
@@ -432,5 +457,14 @@ class _ChewieCustomWithDanmakuState extends State<ChewieCustomWithDanmaku> {
             )),
       ),
     );
+  }
+  //绝对值
+  int abs(int n){
+    if(n<0){
+      return -n;
+    }
+    else{
+      return n;
+    }
   }
 }

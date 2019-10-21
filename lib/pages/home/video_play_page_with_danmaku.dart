@@ -30,14 +30,15 @@ class VideoPlayPageWithDanmaku extends StatefulWidget {
 class _VideoPlayPageWithDanmakuState extends State<VideoPlayPageWithDanmaku> {
   var _videoplayscaffoldkey = new GlobalKey<ScaffoldState>(); //key的用法
   String aid;
-  String msg="正在初始化";
+  String msg = "正在初始化";
   int replayCount = 0;
   int page = 0;
   int qn = 64;
   VideoDetailItem videoDetailItem; //视频详细信息，介绍等
   TabController _tabController =
       TabController(length: 2, vsync: AnimatedListState());
-  VideoPlayerController _videoController;
+  VideoPlayerController _videoController; //视频播放器
+  VideoPlayerController _audioController; //音频播放器
   ChewieController _chewieController;
   List<DanmakuItem> _preList = [];
   DanmakuController _danmakuController;
@@ -55,6 +56,7 @@ class _VideoPlayPageWithDanmakuState extends State<VideoPlayPageWithDanmaku> {
     _tabController?.dispose();
     _chewieController?.dispose();
     _videoController?.dispose();
+    _audioController?.dispose();
     super.dispose();
   }
 
@@ -67,8 +69,7 @@ class _VideoPlayPageWithDanmakuState extends State<VideoPlayPageWithDanmaku> {
     videoDetailItem = await VideoApi.getVideoDetail(aid);
     if (videoDetailItem != null) {
       _getvideodetailisok = true;
-    }
-    else{
+    } else {
       Fluttertoast.showToast(msg: "获取视频信息失败");
     }
     if (this.mounted) {
@@ -104,12 +105,14 @@ class _VideoPlayPageWithDanmakuState extends State<VideoPlayPageWithDanmaku> {
     var snackBar = SnackBar(content: Text(message));
     _videoplayscaffoldkey.currentState.showSnackBar(snackBar);
   }
+
   //显示进度条下的提示
-  setMsg(String s){
+  setMsg(String s) {
     setState(() {
-      msg=s;
+      msg = s;
     });
   }
+
   Future<void> initVideo() async {
     if (videoDetailItem == null) {
       return;
@@ -120,32 +123,43 @@ class _VideoPlayPageWithDanmakuState extends State<VideoPlayPageWithDanmaku> {
     var url = await VideoApi.getVideoPlayUrlV2(
         videoDetailItem.data.pages[page].cid,
         qn: qn);
+    var urlMap = await VideoApi.getVideoPlayUrlV3(
+        aid, videoDetailItem.data.pages[page].cid);
     if (url == null) {
       Fluttertoast.showToast(msg: "获取视频链接失败");
       setMsg("获取视频链接失败");
       return;
     }
+    if (urlMap == null) {
+      Fluttertoast.showToast(msg: "获取视频链接失败");
+      setMsg("获取视频链接失败");
+      return;
+    }
     setMsg("正在缓冲视频");
-    if (url is String) {
+    if (mounted) {
       _videoController = VideoPlayerController.network(
-        url,
-      )..initialize().then((_) {
-          setState(() {
-            _chewieController = ChewieController(
-              videoPlayerController: _videoController,
-              placeholder: Center(
-                child: Text(
-                  "正在缓冲",
-                  style: TextStyle(color: Colors.white30),
-                ),
-              ),
-              autoPlay: true,
-              aspectRatio: _videoController.value.size.aspectRatio,
-              allowedScreenSleep: false,
-              customControls: ChewieCustomWithDanmaku(_danmakuController),
-            );
-          });
-        });
+        urlMap["video_url"],
+      );
+      await _videoController.initialize();
+      _audioController = VideoPlayerController.network(
+        urlMap["audio_url"],
+      );
+      await _audioController.initialize();
+      _audioController.play();
+      setState(
+        () {
+          _chewieController = ChewieController(
+            videoPlayerController: _videoController,
+            autoPlay: true,
+            aspectRatio: _videoController.value.size.aspectRatio,
+            allowedScreenSleep: false,
+            customControls: ChewieCustomWithDanmaku(
+              _danmakuController,
+              audioController: _audioController,
+            ),
+          );
+        },
+      );
     }
   }
 
@@ -190,7 +204,10 @@ class _VideoPlayPageWithDanmakuState extends State<VideoPlayPageWithDanmaku> {
                         SizedBox(
                           height: 10,
                         ),
-                        Text(msg,style: prefix0.TextStyle(color: Colors.grey),)
+                        Text(
+                          msg,
+                          style: prefix0.TextStyle(color: Colors.grey),
+                        )
                       ],
                     ),
                   ),
