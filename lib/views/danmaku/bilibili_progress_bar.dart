@@ -30,12 +30,18 @@ class BilibiliVideoProgressBar extends StatefulWidget {
 class _VideoProgressBarState extends State<BilibiliVideoProgressBar> {
   _VideoProgressBarState() {
     listener = () {
-      setState(() {});
+      if(mounted){
+        setState(() {
+        });
+      }
     };
   }
 
   VoidCallback listener;
   bool _controllerWasPlaying = false;
+  bool _isDrag = false;
+  
+  Duration _duration;
 
   VideoPlayerController get videoController => widget.videoController;
   VideoPlayerController get audioController => widget.audioController;
@@ -59,11 +65,18 @@ class _VideoProgressBarState extends State<BilibiliVideoProgressBar> {
       final Offset tapPos = box.globalToLocal(globalPosition);
       final double relative = tapPos.dx / box.size.width;
       final Duration position = videoController.value.duration * relative;
-      print("videoController.seekTo($position)");
+      //print("videoController.seekTo($position)");
       videoController.seekTo(position);
       if (widget.onSeekToRelativePosition != null) {
         widget.onSeekToRelativePosition(position);
       }
+    }
+    Duration _calDuration(Offset offset){
+      final box = context.findRenderObject() as RenderBox;
+      final Offset tapPos = box.globalToLocal(offset);
+      final double relative = tapPos.dx / box.size.width;
+      return videoController.value.duration * relative;
+
     }
 
     return GestureDetector(
@@ -81,54 +94,67 @@ class _VideoProgressBarState extends State<BilibiliVideoProgressBar> {
         ),
       ),
       onHorizontalDragStart: (DragStartDetails details) {
-        if (!videoController.value.initialized) {
-          return;
-        }
-        _controllerWasPlaying = videoController.value.isPlaying;
-        if (_controllerWasPlaying) {
-          videoController.pause();
-        }
-        if (audioController.value.isPlaying) {
-          audioController.pause();
-        }
+        // if (!videoController.value.initialized) {
+        //   return;
+        // }
+        // _controllerWasPlaying = videoController.value.isPlaying;
+        // if (_controllerWasPlaying) {
+        //   videoController.pause();
+        // }
+        // if (audioController?.value?.isPlaying??false) {
+        //   audioController.pause();
+        // }
         if (widget.onDragStart != null) {
           widget.onDragStart();
         }
       },
       onHorizontalDragUpdate: (DragUpdateDetails details) {
-        if (!videoController.value.initialized) {
-          return;
-        }
-        seekToRelativePosition(details.globalPosition);
+        // if (!videoController.value.initialized) {
+        //   return;
+        // }
+        // _duration=_calDuration(details.globalPosition);
+        // _isDrag=true;
         if (widget.onDragUpdate != null) {
           widget.onDragUpdate();
         }
       },
-      onHorizontalDragEnd: (DragEndDetails details) {
-        if (_controllerWasPlaying) {
-          videoController.play().then((_) {
-            if (!audioController.value.isPlaying) {
-              audioController.seekTo(videoController.value.position);
-              audioController.play();
-            }
-          });
-        }
-        if (widget.onDragEnd != null) {
-          widget.onDragEnd();
-        }
+      onHorizontalDragEnd: (DragEndDetails details) async{
+        // await videoController.seekTo(_duration);
+        // await audioController?.seekTo(_duration);
+        // if(!videoController.value.isPlaying){
+        //   await videoController.play();
+        // }
+        // if(audioController!=null&&!audioController.value.isPlaying){
+        //   await audioController.play();
+        // }
+        // if (widget.onDragEnd != null) {
+        //   widget.onDragEnd();
+        // }
+        // _isDrag=false;
       },
-      onTapDown: (TapDownDetails details) {
+      onTapDown: (TapDownDetails details) async{
+        print("onTapDown");
         if (!videoController.value.initialized) {
           return;
         }
-        seekToRelativePosition(details.globalPosition);
+        await audioController.pause();
+        _duration=_calDuration(details.globalPosition);
+        await videoController.seekTo(_duration);
+        await audioController?.seekTo(_duration);
+        if(!videoController.value.isPlaying){
+          await videoController.play();
+        }
+        if(audioController!=null&&!audioController.value.isPlaying){
+          await audioController.play();
+        }
+        print("change ok");
       },
     );
   }
 }
 
 class _ProgressBarPainter extends CustomPainter {
-  _ProgressBarPainter(this.value, this.colors);
+  _ProgressBarPainter(this.value, this.colors,);
 
   VideoPlayerValue value;
   ChewieProgressColors colors;
@@ -141,7 +167,6 @@ class _ProgressBarPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final height = 2.0;
-
     canvas.drawRRect(
       RRect.fromRectAndRadius(
         Rect.fromPoints(

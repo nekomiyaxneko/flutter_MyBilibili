@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_MyBilibili/icons/bilibili_icons.dart';
 import 'package:flutter_MyBilibili/model/video_detail_item.dart';
 import 'package:flutter_MyBilibili/tools/MyMath.dart';
+import 'package:flutter_MyBilibili/tools/time_to_string.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -10,13 +11,17 @@ import 'package:url_launcher/url_launcher.dart';
 class VideoDetailPage extends StatefulWidget {
   final VideoDetailItem videoDetailItem;
   final String aid;
-  VideoDetailPage(this.videoDetailItem, this.aid);
+  final int page;
+  final Function onTapPage;
+  VideoDetailPage(this.videoDetailItem, this.aid,{this.page=0,this.onTapPage});
   @override
   _VideoDetailPageState createState() => _VideoDetailPageState();
 }
 
 class _VideoDetailPageState extends State<VideoDetailPage> {
   String aid;
+  int get page => widget.page;
+
   @override
   void initState() {
     aid = widget.aid;
@@ -28,6 +33,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
     return Padding(
       padding: EdgeInsets.only(left: 10, right: 10),
       child: ListView(
+        shrinkWrap: true,
         physics: ClampingScrollPhysics(),
         children: <Widget>[
           SizedBox(
@@ -103,6 +109,10 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                 "  弹幕 ${MyMath.intToString(widget.videoDetailItem.data.stat.danmaku)}",
                 style: TextStyle(color: Colors.grey[600], fontSize: 12),
               ),
+              Text(
+                "  ${TimeToString.timeToString(DateTime.fromMillisecondsSinceEpoch(widget.videoDetailItem.data.ctime*1000))} ",
+                style: TextStyle(color: Colors.grey[600], fontSize: 12),
+              ),
               GestureDetector(
                 onLongPress: () {
                   Clipboard.setData(ClipboardData(text: "AV${widget.aid}"));
@@ -118,6 +128,37 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
           SizedBox(
             height: 10,
           ),
+          Offstage(
+            offstage: widget.videoDetailItem.data.pages.length<=1,
+            child: 
+          Container(
+            height: 50,
+            child: ListView(
+            padding: EdgeInsets.only(bottom: 10),
+            shrinkWrap: true,
+            physics: ClampingScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            children: widget.videoDetailItem.data.pages.map((Pages pages){
+              return Container(
+                width: 120,
+                margin: EdgeInsets.only(right: 5,left: 5),
+                child: OutlineButton(
+                  child: Text(pages.part,maxLines: 1,overflow: TextOverflow.ellipsis,),
+                  textColor: pages.page-1==page?Colors.pink[300]:Colors.black,
+                  borderSide: BorderSide(
+                    color: pages.page-1==page?Colors.pink[300]:Colors.grey[400],
+                    width: 1,
+                  ),
+                  onPressed: (){
+                    widget?.onTapPage(pages.page-1);
+                  },
+              ),
+              );
+            }).toList(),
+          ),
+          ),
+          ),
+          
           Text(
             widget.videoDetailItem.data.desc,
             style: TextStyle(color: Colors.grey),

@@ -36,6 +36,7 @@ class _ChewieCustomWithDanmakuState extends State<ChewieCustomWithDanmaku> {
 
   final barHeight = 48.0;
   final marginSize = 5.0;
+  DateTime _lastSync;
 
   VideoPlayerController controller;
   ChewieController chewieController;
@@ -409,10 +410,13 @@ class _ChewieCustomWithDanmakuState extends State<ChewieCustomWithDanmaku> {
     widget.danmakuController
         .setDuration(controller.value.position.inMilliseconds);
     setState(() {
-      //同步音频视频
       _latestValue = controller.value;
-      if(widget.audioController!=null&&abs(widget.audioController.value.position.inMilliseconds-controller.value.position.inMilliseconds)>600){
-        widget.audioController.seekTo(controller.value.position);
+      //同步音频视频
+      //print("widget.audioController.value.isPlaying ${widget.audioController.value.isPlaying}");
+      if(widget.audioController!=null&&abs(widget.audioController.value.position.inMilliseconds-controller.value.position.inMilliseconds)>600&&(_lastSync==null||DateTime.now().difference(_lastSync).inMilliseconds>5000)){
+        widget.audioController?.seekTo(controller.value.position);
+        widget.audioController?.play();
+        _lastSync=DateTime.now();
       }
     });
   }
@@ -436,18 +440,10 @@ class _ChewieCustomWithDanmakuState extends State<ChewieCustomWithDanmaku> {
           setState(() {
             _dragging = false;
           });
-
           _startHideTimer();
         },
         onDragUpdate: (){
-            print("onDragUpdate :${controller.value.position.inMilliseconds}");
-
-        },
-        onSeekToRelativePosition: (p){
-          if(widget.audioController!=null){
-            //widget.audioController.seekTo(p);
-            print("onSeekToRelativePosition :${controller.value.position.inMilliseconds}");
-          }
+            //print("onDragUpdate :${controller.value.position.inMilliseconds}");
         },
             colors: ChewieProgressColors(
               playedColor: Theme.of(context).primaryColor,

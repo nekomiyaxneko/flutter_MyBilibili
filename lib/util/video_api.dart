@@ -49,7 +49,7 @@ class VideoApi{
     }
   }
 
-  static getVideoPlayUrlV3(String aid,int cid,{int qn=32})async{
+  static getVideoPlayUrlV3(String aid,int cid,{int qn=64})async{
     String appserct="aHRmhWMLkdeMuILqORnYZocwMBpMEOdt";
     String path="https://app.bilibili.com/x/playurl";
     int ts=DateTime.now().millisecondsSinceEpoch;
@@ -62,11 +62,22 @@ class VideoApi{
       options: Options(
         responseType: ResponseType.json
       ));
-      
-      if(res.data["code"]==0){
-        String vl=res.data["data"]["dash"]["video"][0]["base_url"];
+      if(res.data["data"]["dash"]!=null){
+        String vl;
+        for(Map<String,dynamic> jd in res.data["data"]["dash"]["video"]){
+          if(jd["id"]==qn){
+            vl=jd["base_url"];
+            break;
+          }
+        }
+        vl=vl??res.data["data"]["dash"]["video"][0]["base_url"];
+
         String al=res.data["data"]["dash"]["audio"][0]["base_url"];
         return {"video_url":vl,"audio_url":al};
+      }
+      else if(res.data["data"]["durl"]!=null){
+        String vl=res.data["data"]["durl"][0]["url"];
+        return {"video_url":vl,"audio_url":null};
       }
       return null;
     }

@@ -29,8 +29,8 @@ class DanmakuController {
     danmakuEventBus.fire(DanmakuStatus(cmd: DanmakuStatus.setDuration,param: duration));
   }
 
-  void dispose() {
-    _danmakuSubscription?.cancel();
+  Future<void> dispose() async{
+    await _danmakuSubscription?.cancel();
   }
 
   void init() {
