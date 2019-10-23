@@ -141,6 +141,7 @@ class _ReviewsPageState extends State<ReviewsPage>
             children: <Widget>[
               Container(
                 width: 45,
+                alignment: Alignment.topCenter,
                 child: ClipOval(
                   child: Image.network(
                     review.pic+"@100w_100h",

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_MyBilibili/icons/bilibili_icons.dart';
 import 'package:flutter_MyBilibili/model/jsonmodel/hot_item.dart';
 import 'package:flutter_MyBilibili/pages/home/VideoPlayPage.dart';
+import 'package:flutter_MyBilibili/pages/home/video_play_page_with_danmaku.dart';
 import 'package:flutter_MyBilibili/tools/LineTools.dart';
 import 'package:flutter_MyBilibili/util/BilibiliAPI/bilibili_dio.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -235,7 +236,7 @@ class HotVideoView extends StatelessWidget {
         Navigator.push(
           context,
           new MaterialPageRoute(
-            builder: (contex) => new VideoPlayPage(item.aid),
+            builder: (contex) => new VideoPlayPageWithDanmaku(item.aid),
           ),
         );
       },
@@ -409,7 +410,7 @@ class HotUpView extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  VideoPlayPage(item.upVideoList[i].aid)));
+                                  VideoPlayPageWithDanmaku(item.upVideoList[i].aid)));
                     },
                     child: HotUpVideoView(item.upVideoList[i]),
                   );

@@ -54,7 +54,7 @@ class _DanmakuViewState extends State<DanmakuView> {
       body: Stack(
         key: _globalKey,
         children: _danmakus.map((item) {
-          return new DanmakuTile(item, wide, widget.controller);
+          return DanmakuTile(item, wide, widget.controller);
         }).toList(),
       ),
     );

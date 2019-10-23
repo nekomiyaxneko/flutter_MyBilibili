@@ -37,9 +37,47 @@ class VideoApi{
       options: Options(
         responseType: ResponseType.json
       ));
-      print(res.data);
       if(res.data["durl"][0]["url"]!=null){
         return res.data["durl"][0]["url"];
+      }
+      return null;
+    }
+    catch(e){
+      print(e.toString());
+      print("获取视频播放地址失败");
+      return null;
+    }
+  }
+
+  static getVideoPlayUrlV3(String aid,int cid,{int qn=64})async{
+    String appserct="aHRmhWMLkdeMuILqORnYZocwMBpMEOdt";
+    String path="https://app.bilibili.com/x/playurl";
+    int ts=DateTime.now().millisecondsSinceEpoch;
+    String data="actionkey=appkey&aid=$aid&appkey=iVGUTjsxvpLeuDCf&build=5490400&buvid=XZF9F55FE566C57599024A397F5F160E74DBE&cid=$cid&device=android&expire=0&fnval=16&fnver=0&force_host=0&fourk=0&from_spmid=tm.recommend.0.0&mid=0&mobi_app=android&otype=json&platform=android&qn=$qn&spmid=main.ugc-video-detail.0.0&ts=$ts";
+    String sign=md5.convert(utf8.encode(data+appserct)).toString();
+    String url="$path?$data&sign=$sign";
+    Dio dio=Dio();
+    try{
+      Response res=await dio.get(url,
+      options: Options(
+        responseType: ResponseType.json
+      ));
+      if(res.data["data"]["dash"]!=null){
+        String vl;
+        for(Map<String,dynamic> jd in res.data["data"]["dash"]["video"]){
+          if(jd["id"]==qn){
+            vl=jd["base_url"];
+            break;
+          }
+        }
+        vl=vl??res.data["data"]["dash"]["video"][0]["base_url"];
+
+        String al=res.data["data"]["dash"]["audio"][0]["base_url"];
+        return {"video_url":vl,"audio_url":al};
+      }
+      else if(res.data["data"]["durl"]!=null){
+        String vl=res.data["data"]["durl"][0]["url"];
+        return {"video_url":vl,"audio_url":null};
       }
       return null;
     }

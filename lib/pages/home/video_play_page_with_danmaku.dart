@@ -1,21 +1,19 @@
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:chewie/chewie.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_MyBilibili/model/video_detail_item.dart';
-import 'package:flutter_MyBilibili/views/danmaku/my_chewie_custom.dart';
+import 'package:flutter_MyBilibili/tools/MyMath.dart';
+import 'package:flutter_MyBilibili/views/danmaku/chewie_custom_with_danmaku.dart';
 import 'package:xml/xml.dart' as xml;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_MyBilibili/icons/bilibili_icons.dart';
-import 'package:flutter_MyBilibili/model/VideoItemFromJson.dart';
 import 'package:flutter_MyBilibili/pages/home/ReviewsPage.dart';
 import 'package:flutter_MyBilibili/pages/home/video_detail_page.dart';
-import 'package:flutter_MyBilibili/util/GetUtilBilibili.dart';
 import 'package:flutter_MyBilibili/util/video_api.dart';
 import 'package:flutter_MyBilibili/views/danmaku/danmaku_api.dart';
 import 'package:flutter_MyBilibili/views/danmaku/danmaku_controller.dart';
 import 'package:flutter_MyBilibili/views/danmaku/danmaku_item.dart';
-import 'package:flutter_MyBilibili/views/my_chewie_custom.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -32,53 +30,66 @@ class VideoPlayPageWithDanmaku extends StatefulWidget {
 class _VideoPlayPageWithDanmakuState extends State<VideoPlayPageWithDanmaku> {
   var _videoplayscaffoldkey = new GlobalKey<ScaffoldState>(); //key的用法
   String aid;
+  String msg = "正在初始化";
   int replayCount = 0;
-  int page=0;
-  int qn=64;
-  VideoDetailItem videoDetailItem;//视频详细信息，介绍等
+  int page = 0;
+  int qn = 64;
+  VideoDetailItem videoDetailItem; //视频详细信息，介绍等
   TabController _tabController =
       TabController(length: 2, vsync: AnimatedListState());
-  VideoPlayerController _videoController;
-  ChewieController _chewieController;
+  List<VideoPlayerController> _videoControllerList = []; //视频播放器
+  List<VideoPlayerController> _audioControllerList = []; //音频播放器
   List<DanmakuItem> _preList = [];
   DanmakuController _danmakuController;
   bool _getvideodetailisok = false;
+  bool _isInitVideoOk = false;
   @override
   void initState() {
+    super.initState();
     aid = widget.aid;
     init();
-    super.initState();
   }
 
   @override
   void dispose() {
+    super.dispose();
     _danmakuController?.dispose();
     _tabController?.dispose();
-    _chewieController?.dispose();
-    _videoController?.dispose();
-    super.dispose();
+    for (VideoPlayerController videoPlayerController in _videoControllerList) {
+      videoPlayerController?.dispose();
+    }
+    for (VideoPlayerController audioPlayerController in _audioControllerList) {
+      audioPlayerController?.dispose();
+    }
   }
-  init()async{
+
+  init() async {
     await getDetail();
     await initVideo();
   }
- 
+
   Future<void> getDetail() async {
-    videoDetailItem =await VideoApi.getVideoDetail(aid);
+    videoDetailItem = await VideoApi.getVideoDetail(aid);
     if (videoDetailItem != null) {
       _getvideodetailisok = true;
+    } else {
+      Fluttertoast.showToast(msg: "获取视频信息失败");
     }
+    _videoControllerList =
+        List<VideoPlayerController>(videoDetailItem.data.pages.length);
+    _audioControllerList =
+        List<VideoPlayerController>(videoDetailItem.data.pages.length);
     if (this.mounted) {
       setState(() {});
     }
   }
 
   Future<void> getDanmaku() async {
-    var data = await DanmakuApi.getDanmakuByUrl("");
+    var data = await DanmakuApi.getDanmakuByUrl(
+        videoDetailItem.data.pages[page].dmlink);
     if (data != null) {
       xml.XmlDocument document = xml.parse(data);
       var res = document.findAllElements("d").toList();
-      print(res.length);
       for (int i = 0; i < res.length; i++) {
         var item = res[i];
         String msg = item.firstChild.toString();
@@ -93,6 +104,9 @@ class _VideoPlayPageWithDanmakuState extends State<VideoPlayPageWithDanmaku> {
       });
     }
     _danmakuController = DanmakuController(_preList);
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   //显示提示
@@ -101,33 +115,80 @@ class _VideoPlayPageWithDanmakuState extends State<VideoPlayPageWithDanmaku> {
     _videoplayscaffoldkey.currentState.showSnackBar(snackBar);
   }
 
+  //显示进度条下的提示
+  setMsg(String s) {
+    if (!mounted) return;
+    setState(() {
+      msg = s;
+    });
+  }
+
   Future<void> initVideo() async {
+    _isInitVideoOk = false;
+    int tempPage = page;
+    if (videoDetailItem == null) {
+      return;
+    }
+    if (tempPage == page) {
+      setMsg("正在获取弹幕");
+    }
     await getDanmaku();
-     if(videoDetailItem==null){
+    if (tempPage == page) {
+      setMsg("正在获取视频链接");
+    }
+    var urlMap = await VideoApi.getVideoPlayUrlV3(
+        aid, videoDetailItem.data.pages[tempPage].cid);
+    if (urlMap == null && tempPage == page) {
+      Fluttertoast.showToast(msg: "获取视频链接失败");
+      setMsg("获取视频链接失败");
       return;
     }
-    var url = await VideoApi.getVideoPlayUrlV2(videoDetailItem.data.pages[page].cid,qn: qn);
-    if (url == null) {
-      Fluttertoast.showToast(msg: "获取视频播放地址失败");
+    if (tempPage == page) {
+      setMsg("正在缓冲视频");
+    } else {
       return;
     }
-    if (url is String) {
-      _videoController = VideoPlayerController.network(
-        url,
-      )..initialize().then((_) {
-          setState(() {
-            _chewieController = ChewieController(
-              videoPlayerController: _videoController,
-              placeholder: Center(
-                child: Text("正在缓冲",style: TextStyle(color: Colors.white30),),
-              ),
-              autoPlay: true,
-              aspectRatio: _videoController.value.size.aspectRatio,
-              allowedScreenSleep: false,
-              customControls: ChewieCustomWithDanmaku(_danmakuController),
-            );
-          });
+    if (mounted) {
+      _videoControllerList[tempPage]?.dispose();
+      _videoControllerList[tempPage] = VideoPlayerController.network(
+        urlMap["video_url"],
+      );
+      await _videoControllerList[tempPage].initialize();
+      if (urlMap["audio_url"] != null) {
+        _audioControllerList[tempPage]?.dispose();
+        _audioControllerList[tempPage] = VideoPlayerController.network(
+          urlMap["audio_url"],
+        );
+      }
+      await _audioControllerList[tempPage]?.initialize();
+      if (tempPage == page) {
+        await _audioControllerList[tempPage]?.play();
+      } else {
+        return;
+      }
+      if (mounted && tempPage == page) {
+        setState(() {
+          _isInitVideoOk = true;
         });
+      }
+    }
+  }
+
+  void changePage(int i) async {
+    if (i != page) {
+      setState(() {
+        _isInitVideoOk = false;
+      });
+      await _audioControllerList[page]?.pause();
+      await _videoControllerList[page]?.pause();
+      await _audioControllerList[page]?.dispose();
+      await _videoControllerList[page]?.dispose();
+      await _danmakuController?.dispose();
+      _audioControllerList[page] = null;
+      _videoControllerList[page] = null;
+      page = i;
+      print("onchangepage");
+      await initVideo();
     }
   }
 
@@ -151,6 +212,7 @@ class _VideoPlayPageWithDanmakuState extends State<VideoPlayPageWithDanmaku> {
                 MediaQueryData.fromWindow(window).padding.top +
                 30),
         child: AppBar(
+          backgroundColor: Colors.white,
           elevation: 1,
           centerTitle: true,
           automaticallyImplyLeading: true,
@@ -158,12 +220,35 @@ class _VideoPlayPageWithDanmakuState extends State<VideoPlayPageWithDanmaku> {
             margin: EdgeInsets.only(bottom: 30),
             color: Colors.black,
             width: double.infinity,
-            child: _chewieController != null
+            child: _isInitVideoOk
                 ? Chewie(
-                    controller: _chewieController,
+                    controller: ChewieController(
+                      videoPlayerController: _videoControllerList[page],
+                      autoPlay: true,
+                      aspectRatio:
+                          _videoControllerList[page].value.size.aspectRatio,
+                      allowedScreenSleep: false,
+                      customControls: ChewieCustomWithDanmaku(
+                        _danmakuController,
+                        audioController: _audioControllerList[page],
+                      ),
+                    ),
                   )
                 : Center(
-                    child: CircularProgressIndicator(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        CircularProgressIndicator(),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          msg,
+                          style: prefix0.TextStyle(color: Colors.grey),
+                        )
+                      ],
+                    ),
                   ),
           ),
           actions: <Widget>[
@@ -172,57 +257,27 @@ class _VideoPlayPageWithDanmakuState extends State<VideoPlayPageWithDanmaku> {
               onPressed: _showCheckDialog,
             )
           ],
-          bottom: GetPreferredSizeWidget(
-            Container(
-              color: Colors.white,
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: TabBar(
-                      controller: _tabController,
-                      indicatorSize: TabBarIndicatorSize.label,
-                      labelColor: Colors.pinkAccent,
-                      unselectedLabelColor: Colors.grey,
-                      indicatorColor: Colors.pinkAccent,
-                      tabs: <Widget>[
-                        Container(
-                          height: 30,
-                          child: Tab(
-                            text: "简介",
-                          ),
-                        ),
-                        Container(
-                            height: 30,
-                            child: Tab(
-                              text: replayCount == 0
-                                  ? "评论"
-                                  : "评论 ${replayCount.toString()}",
-                            )),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                        margin: EdgeInsets.only(right: 40),
-                        alignment: Alignment.centerRight,
-                        child: AnimatedContainer(
-                          //TODO 弹幕开关
-                          duration: Duration(milliseconds: 500),
-                          padding: EdgeInsets.only(left: 5, right: 5),
-                          decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Icon(
-                            BIcon.danmu_off,
-                            color: Colors.grey[600],
-                          ),
-                        )),
-                  ),
-                ],
+          bottom: TabBar(
+            controller: _tabController,
+            indicatorSize: TabBarIndicatorSize.label,
+            labelColor: Colors.pinkAccent,
+            unselectedLabelColor: Colors.grey,
+            indicatorColor: Colors.pinkAccent,
+            tabs: <Widget>[
+              Container(
+                height: 30,
+                child: Tab(
+                  text: "简介",
+                ),
               ),
-            ),
+              Container(
+                  height: 30,
+                  child: Tab(
+                    text: videoDetailItem == null
+                        ? "评论"
+                        : "评论 ${MyMath.intToString(videoDetailItem.data.stat.reply)}",
+                  )),
+            ],
           ),
         ),
       ),
@@ -230,7 +285,14 @@ class _VideoPlayPageWithDanmakuState extends State<VideoPlayPageWithDanmaku> {
           ? TabBarView(
               controller: _tabController,
               children: <Widget>[
-                VideoDetailPage(videoDetailItem, aid),
+                VideoDetailPage(
+                  videoDetailItem,
+                  aid,
+                  page: page,
+                  onTapPage: (int i) {
+                    changePage(i);
+                  },
+                ),
                 ReviewsPage(
                   aid,
                   replayCount,
@@ -293,6 +355,7 @@ class _VideoPlayPageWithDanmakuState extends State<VideoPlayPageWithDanmaku> {
   }
 }
 
+//可以将普通widget放进去
 class GetPreferredSizeWidget extends StatelessWidget
     implements PreferredSizeWidget {
   final Widget child;

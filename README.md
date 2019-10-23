@@ -7,19 +7,37 @@ flutter练习项目
 
 # 更新日志
 ---------------------------
-* 2019/10/16
-	详情可以查看粉丝数
-* 2019/10/17
-	修复视频无法播放
-	改善视频清晰度，目前最大支持720p。（以前是360p？不，感觉还要更低）
+* 2019/10/16  
+	详情可以查看粉丝数  
+	
+* 2019/10/17  
+	修复视频无法播放  
+	改善视频清晰度，目前最大支持720p。（以前是360p？不，感觉还要更低）  
+	
+* 2019/10/20  
+	新增弹幕播放功能  
+	
+* 2019/10/21  
+	更换了获取视频播放地址的API  
+	修复视频进度条无法调节  
+	修复弹幕播放异常  
+	
+* 2019/10/22
+	
+	支持分p播放
 
 
 # 存在问题
 --------------------------
-* 2019/10/16
-	视频播放api无法使用
-* 2019/10/17 
-	播放视频时如果调进度条会从头开始
+* 2019/10/16  
+	~~视频播放api无法使用~~  
+* 2019/10/17   
+	~~播放视频时如果调进度条会从头开始~~ 
+	原因是videoplayer底层使用的是exoplayer，这个播放器播放flv视频无法调进度条  
+	[exoplayer支持的格式](https://exoplayer.dev/progressive.html)  
+	[关于exoplayer不支持flv前进后退  ](https://github.com/google/ExoPlayer/issues/6190)
+* 2019/10/21  
+	调节进度条有时候会鬼畜23333  
 
 # 功能
 ----------------------------
@@ -34,8 +52,10 @@ flutter练习项目
 	* 支持关键字和av号搜索
 	* 热搜推荐和搜索记录
 	* 支持按照默认/播放量/弹幕数/新发布排序
-* 播放界面
+* 播放
 	* **可以播放视频了！**
+	* **可以看弹幕！**
+	* 支持分P播放
 	* 可以看到视频信息和评论（评论暂时只做了前面的热评和一些最新的评论）
 	* 查看up粉丝数、视频播放量、弹幕数量、收藏等
 	* 点击右上角可以保存封面到相册
@@ -56,22 +76,25 @@ flutter练习项目
 
 # 界面截图
 -----------------------------
-| 截图                                                         |
-| :------------------------------------------------------------:|
-| 启动/home/频道/动态/会员购/侧滑菜单                          |
+|                             截图                             |
+| :----------------------------------------------------------: |
+|             启动/home/频道/动态/会员购/侧滑菜单              |
 | ![在这里插入图片描述](https://img-blog.csdnimg.cn/20190922192030995.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTM1MTgwNjQ=,size_16,color_FFFFFF,t_70) |
+|                                                              |
+|                    视频播放/评论/直播播放                    |
+| ![在这里插入图片描述](https://img-blog.csdnimg.cn/20190922192905429.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTM1MTgwNjQ=,size_16,color_FFFFFF,t_70) |
 | |
-| 视频播放/评论/直播播放|
-|![在这里插入图片描述](https://img-blog.csdnimg.cn/20190922192905429.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTM1MTgwNjQ=,size_16,color_FFFFFF,t_70)|
+|                           弹幕功能                           |
+|   ![在这里插入图片描述](https://img-blog.csdnimg.cn/20191020165918932.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTM1MTgwNjQ=,size_16,color_FFFFFF,t_70)      ![在这里插入图片描述](https://img-blog.csdnimg.cn/20191020165943119.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTM1MTgwNjQ=,size_16,color_FFFFFF,t_70)|
 | |
-|直播/热门/追番/影视|
-|![在这里插入图片描述](https://img-blog.csdnimg.cn/20190922193826741.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTM1MTgwNjQ=,size_16,color_FFFFFF,t_70)|
-|  |
-|影视/70周年|
-|![在这里插入图片描述](https://img-blog.csdnimg.cn/20190922194042262.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTM1MTgwNjQ=,size_16,color_FFFFFF,t_70)|
-|  |
-|搜索/登陆/保存封面|
-|![在这里插入图片描述](https://img-blog.csdnimg.cn/20190922194522476.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTM1MTgwNjQ=,size_16,color_FFFFFF,t_70)|
+|                     直播/热门/追番/影视                      |
+| ![在这里插入图片描述](https://img-blog.csdnimg.cn/20190922193826741.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTM1MTgwNjQ=,size_16,color_FFFFFF,t_70) |
+|                                                              |
+|                         影视/70周年                          |
+| ![在这里插入图片描述](https://img-blog.csdnimg.cn/20190922194042262.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTM1MTgwNjQ=,size_16,color_FFFFFF,t_70) |
+|                                                              |
+|                      搜索/登陆/保存封面                      |
+| ![在这里插入图片描述](https://img-blog.csdnimg.cn/20190922194522476.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTM1MTgwNjQ=,size_16,color_FFFFFF,t_70) |
 
 
 
