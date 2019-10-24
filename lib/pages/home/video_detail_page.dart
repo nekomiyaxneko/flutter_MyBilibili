@@ -100,16 +100,21 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
             height: 15,
           ),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               Icon(
                 BIcon.play,
+                color: Colors.grey[600],
+                size: 17,
               ),
               Text(
-                " ${MyMath.intToString(widget.videoDetailItem.data.stat.view)}",
+                " ${MyMath.intToString(widget.videoDetailItem.data.stat.view)} ",
                 style: TextStyle(color: Colors.grey[600], fontSize: 12),
               ),
               Icon(
                 BIcon.danmaku,
+                color: Colors.grey[600],
+                size: 17,
               ),
               Text(
                 " ${MyMath.intToString(widget.videoDetailItem.data.stat.danmaku)}",
