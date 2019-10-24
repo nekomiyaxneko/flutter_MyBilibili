@@ -101,12 +101,18 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
           ),
           Row(
             children: <Widget>[
-              Text(
-                "播放 ${MyMath.intToString(widget.videoDetailItem.data.stat.view)}",
-                style: TextStyle(color: Colors.grey[600], fontSize: 12),
+              Icon(
+                BIcon.play,
               ),
               Text(
-                "  弹幕 ${MyMath.intToString(widget.videoDetailItem.data.stat.danmaku)}",
+                " ${MyMath.intToString(widget.videoDetailItem.data.stat.view)}",
+                style: TextStyle(color: Colors.grey[600], fontSize: 12),
+              ),
+              Icon(
+                BIcon.danmaku,
+              ),
+              Text(
+                " ${MyMath.intToString(widget.videoDetailItem.data.stat.danmaku)}",
                 style: TextStyle(color: Colors.grey[600], fontSize: 12),
               ),
               Text(
