@@ -1,7 +1,6 @@
 # flutter_bilibili
 ------------------
 
-[![MIT License][license-shield]][license-url]
 
 # 简介
 ---------------------------
