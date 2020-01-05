@@ -1,5 +1,8 @@
 # flutter_bilibili
 ------------------
+
+[![MIT License][license-shield]][license-url]
+
 # 简介
 ---------------------------
 flutter练习项目 
