@@ -1,6 +1,6 @@
 # flutter_bilibili
 ------------------
-
+[![license](https://img.shields.io/badge/license-MIT-%23373737.svg)](https://github.com/nekomiyaxneko/flutter_MyBilibili/master/LICENSE)
 
 # 简介
 ---------------------------
